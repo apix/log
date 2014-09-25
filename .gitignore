@@ -1,0 +1,16 @@
+# System related
+.DS_Store
+.build
+.tmp
+*~
+*.log
+
+# Composer related
+composer.lock
+composer.phar
+/vendor/*
+
+# Development related
+/build/
+phpunit.xml
+TODO
