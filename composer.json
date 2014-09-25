@@ -1,0 +1,46 @@
+{
+    "name": "apix/log",
+    "description": "Minimalist PSR-3 compliant logger. Convenient in keeping PHAR bundle small.",
+    "type": "library",
+    "keywords": ["psr", "psr-3", "log", "logger", "apix"],
+    "homepage": "https://github.com/frqnck/apix-log",
+    "license": "BSD-3-Clause",
+    "authors": [
+        {
+            "name": "Franck Cassedanne",
+            "email": "franck@ouarz.net"
+        }
+    ],
+    "support": {
+        "irc": "irc://irc.freenode.org/ouarz"
+    },
+    "require": {
+        "php": ">=5.3",
+        "psr/log": "~1.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "3.7.*"
+    },
+    "suggest": {
+        "ext-apc": "*",
+        "ext-apcu": "*",
+        "ext-redis": "*",
+        "ext-mongo": "*",
+        "ext-memcached": "*",
+        "ext-pdo": "*",
+        "ext-pdo_sqlite": "*",
+        "ext-pdo_mysql": "*",
+        "ext-pdo_pgsql": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Apix\\Log\\": "src/",
+            "Apix\\Log\\tests\\": "tests/"
+        }
+    },
+    "provide": {
+        "psr/log-implementation": "1.0.0"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
