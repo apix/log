@@ -45,7 +45,6 @@ class FileTest extends TestCase
      */
     public function testThrowsInvalidArgumentExceptionWhenCannotCreate()
     {
-        echo PHP_VERSION;
         if (version_compare(PHP_VERSION, '5.4.0', '<')) {
             $this->markTestSkipped(
               'This test failed on PHP53'

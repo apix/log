@@ -26,7 +26,7 @@ abstract class AbstractLogger extends AbsPsrLogger
      * The PSR-3 logging levels.
      * @var array
      */
-    static $levels = array(
+    static protected $levels = array(
         'debug',
         'info',
         'notice',
@@ -52,8 +52,7 @@ abstract class AbstractLogger extends AbsPsrLogger
     /**
      * Gets the named level code.
      *
-     * @param  string                   $level
-     * @return integer
+     * @return string $name
      * @throws InvalidArgumentException
      */
     public static function getLevelCode($name)
@@ -119,13 +118,12 @@ abstract class AbstractLogger extends AbsPsrLogger
     /**
      * Sets the minimal level at which this handler will be triggered.
      *
-     * @param  string|integer $mix
+     * @param  string $name
      * @return self
      */
-    public function setMinLevel($mix)
+    public function setMinLevel($name)
     {
-        // TODO check is int
-        $this->min_level = static::getLevelCode($mix);
+        $this->min_level = static::getLevelCode($name);
 
         return $this;
     }
