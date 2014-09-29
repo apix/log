@@ -25,9 +25,8 @@ class Mail extends ErrorLog implements LoggerInterface
     /**
      * Constructor.
      *
-     * @param  string                           $Email   Email addr to append to.
+     * @param  string                           $email   The email to append to.
      * @param  string|null                      $headers A string of additional (mail) headers.
-     * @see http://php.net/manual/en/function.mail.php
      * @throws Psr\Log\InvalidArgumentException If the email does not validate.
      */
     public function __construct($email, $headers = null)

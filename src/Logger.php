@@ -92,9 +92,9 @@ class Logger extends AbstractLogger
     }
 
     /**
-     * Gets the name of the logging level (obsolete).
+     * Gets the name of the PSR-3 logging level.
      *
-     * @param  integer                  $level
+     * @param  string                   $level
      * @return string
      * @throws InvalidArgumentException
      */

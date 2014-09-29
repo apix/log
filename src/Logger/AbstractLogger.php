@@ -52,7 +52,7 @@ abstract class AbstractLogger extends AbsPsrLogger
     /**
      * Gets the named level code.
      *
-     * @return string $name
+     * @return string                   $name
      * @throws InvalidArgumentException
      */
     public static function getLevelCode($name)
@@ -104,9 +104,9 @@ abstract class AbstractLogger extends AbsPsrLogger
     }
 
     /**
-     * Checks whether the given level code will be handled by this handler.
+     * Checks whether the given level code is handled by this handler.
      *
-     * @param  integer $record
+     * @param  integer $level_code
      * @return boolean
      */
     public function isHandling($level_code)
@@ -123,7 +123,7 @@ abstract class AbstractLogger extends AbsPsrLogger
      */
     public function setMinLevel($name)
     {
-        $this->min_level = static::getLevelCode($name);
+        $this->min_level = (int) static::getLevelCode($name);
 
         return $this;
     }
