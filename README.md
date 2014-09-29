@@ -2,7 +2,7 @@ APIx Log, very thin PSR-3 logger
 ================================
 [![Latest Stable Version](https://poser.pugx.org/apix/log/v/stable.svg)](https://packagist.org/packages/apix/log)  [![Build Status](https://travis-ci.org/frqnck/apix-log.png?branch=master)](https://travis-ci.org/frqnck/apix-log)  [![Code Quality](https://scrutinizer-ci.com/g/frqnck/apix-log/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/frqnck/apix-log/?branch=master)  [![Code Coverage](https://scrutinizer-ci.com/g/frqnck/apix-log/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/frqnck/apix-log/?branch=master)  [![License](https://poser.pugx.org/apix/log/license.svg)](https://packagist.org/packages/apix/log)
 
-Minimalist **PSR-3** compliant logger. Convenient in keeping PHAR bundle small.
+Minimalist **PSR-3** compliant logger.
 
 * Unit **tested** and compliant with PSR0, PSR1 and PSR2.
 * Continuously integrated with **PHP 5.3**, **5.4**, **5.5** and **5.6**
@@ -10,9 +10,7 @@ Minimalist **PSR-3** compliant logger. Convenient in keeping PHAR bundle small.
 
 Feel free to comment, send pull requests and patches...
 
-uʍop-ǝpısdn
-
-Basic usage
+Basic usage (*standalone*)
 -----------
 
 ```php
@@ -25,13 +23,13 @@ Basic usage
   $logger->alert('Running out of {product} ', array('product'=>'beer'));
 ```
 
-Advanced usage 
+Advanced usage (*multi-logs dispatcher*)
 --------------
 
 ```php
   use Apix\Log;
   
-  $logger = new Logger(); // log aggregator
+  $logger = new Logger();
   
   $file_log = new Logger\File('/tmp/debug.log');
   $file_log->setMinLevel('debug'); // same as Psr\Log\LogLevel::DEBUG
