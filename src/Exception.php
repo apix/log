@@ -1,4 +1,5 @@
 <?php
+
 /**
  *
  * This file is part of the Apix Project.
@@ -9,9 +10,10 @@
  *
  */
 
-namespace Apix\Cache;
+namespace Apix\Log;
 
 /**
- * Main Cache Exception.
+ * Main Log Exception.
  */
-class Exception extends \Exception implements \Psr\Cache\CacheException { }
+class Exception extends \Exception
+{ }

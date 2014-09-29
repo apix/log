@@ -10,6 +10,8 @@ Minimalist PSR-3 compliant file logger. Convenient in keeping PHAR bundle small.
 
 Feel free to comment, send pull requests and patches...
 
+uʍop-ǝpısdn
+
 Basic usage
 -----------
 
