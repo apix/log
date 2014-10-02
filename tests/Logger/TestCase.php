@@ -58,18 +58,31 @@ abstract class TestCase extends LoggerInterfaceTest
 
     public function providerContextes()
     {
+        $obj = new \stdClass();
+        $obj->baz = 'biz';
+        $obj->nested = new \stdClass();
+        $obj->nested->buz ='bez';
+
         return array(
             array('bool1', true, '[bool: 1]'),
             array('bool2', false, '[bool: 0]'),
             array('string', 'Foo', 'Foo'),
             array('int', 0, '0'),
             array('float', 0.5, '0.5'),
-            array('__toString', new DummyTest(), '__toString...'),
-            // array('nested', array('with object' => new DummyTest), '[type: array]'),
-            array('object', new \DateTime(), '[object: DateTime]'),
+
             array('resource', fopen('php://memory', 'r'), '[type: resource]'),
-            array('stdClass', new \stdClass(), '[object: stdClass]'),
-            array('null', null, '')
+            array('null', null, ''),
+
+            // objects
+            array('obj__toString', new DummyTest(), '__toString!'),
+            array('obj_stdClass', new \stdClass(), '{}'),
+            array('obj_instance', $obj, '{"baz":"biz","nested":{"buz":"bez"}}'),
+            
+            // nested arrays...
+            array('nested_values', array('foo','bar'), '["foo","bar"]'),
+            array('nested_asso', array('foo'=>1,'bar'=>'2'), '{"foo":1,"bar":"2"}'),
+            array('nested_object', array(new DummyTest), '[{"foo":"bar"}]'),
+            array('nested_unicode', array('ƃol-xᴉdɐ'), '["\u0183ol-x\u1d09d\u0250"]'),
         );
     }
 
@@ -77,8 +90,10 @@ abstract class TestCase extends LoggerInterfaceTest
 
 class DummyTest
 {
+    public $foo = 'bar';
+    protected $foo2 = 'bar2';
     public function __toString()
     {
-        return '__toString...';
+        return '__toString!';
     }
 }

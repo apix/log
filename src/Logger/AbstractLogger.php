@@ -161,8 +161,8 @@ abstract class AbstractLogger extends AbsPsrLogger
                 || ( is_object($val) && method_exists($val, '__toString') )
             ) {
                 $val = (string) $val;
-            } elseif (is_object($val)) {
-                $val = '[object: ' . get_class($val) . ']';
+            } elseif (is_array($val) || is_object($val)) {
+                $val = @json_encode($val);
             } else {
                 $val = '[type: ' . gettype($val) . ']';
             }
