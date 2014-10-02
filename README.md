@@ -26,6 +26,29 @@ Basic usage (*standalone*)
 Advanced usage (*multi-logs dispatcher*)
 --------------
 
+TODO:
+```php
+  use Apix\Log;
+
+  $logger = new Logger();
+  
+  // the log bucket for critical, alert and emergency
+  $notify_log = new Log\Logger\Mail('foo@bar.boo');
+  $notify_log->setMinLevel('critical');
+  $logger->add($notify_log);
+  
+  // the log bucket for notice, warning and error
+  $prod_log = new Log\Logger\File('/tmp/apix_prod.log');
+  $prod_log->setMinLevel('notice');
+  $logger->add($prod_log);
+
+  if (DEBUG) {
+      // the log bucket for info and debug
+      $dev_log = new Log\Logger\File('/tmp/apix_dev.log');
+      $logger->add($dev_log);
+  }
+```
+
 ```php
   use Apix\Log;
   
