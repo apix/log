@@ -1,6 +1,6 @@
 {
     "name": "apix/log",
-    "description": "Minimalist thin (and fast) PSR-3 compliant logger. Convenient in keeping PHAR bundle light.",
+    "description": "Minimalist, thin and fast PSR-3 compliant (multi-bucket) logger.",
     "type": "library",
     "keywords": ["psr", "psr-3", "log", "logger", "apix"],
     "homepage": "https://github.com/frqnck/apix-log",
