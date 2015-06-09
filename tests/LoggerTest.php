@@ -121,28 +121,7 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
         $this->logger->warning('test');
     }
 
-// todo
-    public function _testExample()
-    {
-        $g = $this->_getMocklogger( array('process') );
-        $g->expects($this->once())->method('process');
-
-        $a = $this->_getMocklogger( array('process') );
-        $a->setMinLevel( LogLevel::ALERT );
-        $a->expects($this->once())->method('process');
-
-        $this->logger->add($g);
-        $this->logger->add($a);
-
-        $this->logger->alert('test');
-        $this->logger->debug('test');
-
-    }
-
-    /**
-     * @group test
-     */
-    public function testFunctional()
+    public function TODO_testFunctional()
     {
         // $this->expectOutputString('foo');
 
@@ -162,64 +141,34 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
 
         $this->logger->debug('test filed logged');
         $this->logger->alert('test by email {bb}', array('bb'=>123));
-
     }
 
-    public function _testHandlersNotCalledBeforeFirstHandling()
+    /**
+     * @group todo
+     */
+    public function testFunctionalExample()
     {
-        $l1 = $this->_getMocklogger();
-        $l1->expects($this->never())
-            ->method('isHandling')
-            ->will($this->returnValue(false));
+        $logger = new Logger();
 
-        $l1->expects($this->once())
-            ->method('process')
-            ->will($this->returnValue(false));
+        // the log bucket for critical, alert and emergency
+        $mail_log = new Logger\Mail('foo@bar.boo');
+        $mail_log->setMinLevel('critical');
+        $this->logger->add($mail_log);
 
-        $this->logger->add($l1);
+        // the log bucket for notice, warning and error
+        $prod_log = new Logger\File('/tmp/apix_prod.log');
+        $prod_log->setMinLevel('notice');
+        $this->logger->add($prod_log);
 
-        $l2 = $this->_getMocklogger();
-        $l2->expects($this->once())
-            ->method('isHandling')
-            ->will($this->returnValue(true));
+        if (true) {
+          // the log bucket for info and debug
+          $dev_log = new Logger\File('/tmp/apix_dev.log');
+          $this->logger->add($dev_log);
+        }
 
-        $l2->expects($this->once())
-            ->method('process')
-            ->will($this->returnValue(false));
+        $this->logger->debug('test filed logged');
+        $this->logger->alert('test by email {bb}', array('bb'=>123));
 
-        $this->logger->add($l2);
-
-        $l3 = $this->_getMocklogger();
-        $l3->expects($this->once())
-            ->method('isHandling')
-            ->will($this->returnValue(false))
-        ;
-        $l3->expects($this->never())
-            ->method('process')
-        ;
-        $this->logger->add($l3);
-
-        $this->logger->debug('test');
-    }
-
-    public function _testGetFirstLoggerIndex()
-    {
-        $l1 = $this->_getMocklogger();
-        $l1->expects($this->any())
-            ->method('isHandling')
-            ->will($this->returnValue(false));
-        $this->logger->add($l1);
-
-        $this->assertFalse($this->logger->getFirstLoggerIndex(LogLevel::DEBUG));
-
-        $l2 = $this->_getMocklogger();
-        $l2->setMinLevel( LogLevel::ALERT );
-        $l2->expects($this->any())
-            ->method('isHandling')
-            ->will($this->returnValue(true));
-        $this->logger->add($l2);
-
-        $this->assertSame(0, $this->logger->getFirstLoggerIndex(LogLevel::DEBUG));
     }
 
 }

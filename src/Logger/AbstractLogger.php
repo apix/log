@@ -44,7 +44,7 @@ abstract class AbstractLogger extends AbsPsrLogger
     protected $min_level = 0;
 
     /**
-     * Whether this logger allows log to cascade downstream.
+     * Whether this logger will cascade downstream.
      * @var bool
      */
     protected $cascading = true;
@@ -116,14 +116,15 @@ abstract class AbstractLogger extends AbsPsrLogger
     }
 
     /**
-     * Sets the minimal level at which this handler will be triggered.
+     * Sets the minimal level at which this logger will be triggered.
      *
      * @param  string $name
      * @return self
      */
-    public function setMinLevel($name)
+    public function setMinLevel($name, $cascading=true)
     {
         $this->min_level = (int) static::getLevelCode($name);
+        $this->cascading = (boolean) $cascading;
 
         return $this;
     }
