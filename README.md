@@ -16,7 +16,7 @@ Basic usage (*standalone*)
 ```php
   use Apix\Log;
 
-  $logger = new Logger\File('/tmp/alerts.log');
+  $logger = new Logger\File('/var/log/apix.log');
   $logger->setMinLevel('alert'); // same as Psr\Log\LogLevel::ALERT
 
   // then later, just push/send an alert...  
@@ -26,44 +26,31 @@ Basic usage (*standalone*)
 Advanced usage (*multi-logs dispatcher*)
 --------------
 
-TODO:
 ```php
   use Apix\Log;
-
+  
   $logger = new Logger();
   
-  // the log bucket for critical, alert and emergency
-  $notify_log = new Log\Logger\Mail('foo@bar.boo');
-  $notify_log->setMinLevel('critical');
-  $logger->add($notify_log);
+  // The log bucket for critical, alert and emergency.
+  $urgent_log = new Logger\Mail('foo@bar.boo');
+  $urgent_log->setMinLevel('critical');  // same Psr\Log\LogLevel::CRITICAL
   
-  // the log bucket for notice, warning and error
-  $prod_log = new Log\Logger\File('/tmp/apix_prod.log');
-  $prod_log->setMinLevel('notice');
-  $logger->add($prod_log);
+  // The log bucket for notice, warning and error. 
+  $prod_log = new Log\Logger\File('/var/log/apix_prod.log');
+  $prod_log->setMinLevel('notice');  // same Psr\Log\LogLevel::NOTICE
+  
+  $this->logger->add($urgent_log);
+  $this->logger->add($prod_log);
 
   if (DEBUG) {
-      // the log bucket for info and debug
-      $dev_log = new Log\Logger\File('/tmp/apix_dev.log');
+      // The develop log bucket for info and debug
+      $dev_log = new Log\Logger\File('/tmp/apix_develop.log');
+      $dev_log->setMinLevel('debug');  // same as Psr\Log\LogLevel::DEBUG
+
       $logger->add($dev_log);
   }
-```
 
-```php
-  use Apix\Log;
-  
-  $logger = new Logger();
-  
-  $file_log = new Logger\File('/tmp/debug.log');
-  $file_log->setMinLevel('debug'); // same as Psr\Log\LogLevel::DEBUG
-
-  $mail_log = new Logger\Mail('foo@bar.tld');
-  $mail_log->setMinLevel('critical'); // or Psr\Log\LogLevel::CRITICAL
-  
-  $this->logger->add($mail_log);
-  $this->logger->add($file_log);
-
-  // then notify the loggers...
+  // then (later) notify the loggers...
   $this->logger->notice('Some notice...');
   $this->logger->critical('Blahh blahh...');
 ```
