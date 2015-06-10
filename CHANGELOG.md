@@ -1,10 +1,5 @@
 # APIx-log changelog
 
-#### Version 1.0.2 (10-Jun-2015)
-- Added the logged message can be the context directly i.e. not a string. 
-- Added `\InvalidArgumentException` with an explicite message to the main constructor.
-- Added handling of Exception as context e.g. `$logger()->critical( new \Exception('Boo!') )`. 
-
 #### Version 1.0.1 (9-Jun-2015)
 - Added Scrutinizer checks.
 - Added `.gitattributes` file.

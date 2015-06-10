@@ -36,7 +36,6 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException InvalidArgumentException
-     * @expectedExceptionMessage "stdClass" must interface "Apix\Log\Logger\LoggerInterface"
      */
     public function testConstructorThrowsException()
     {
