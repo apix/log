@@ -47,16 +47,16 @@ abstract class TestCase extends LoggerInterfaceTest
     }
 
     /**
-     * @dataProvider providerContextes
+     * @dataProvider providerMsgContextes
      */
-    public function testContextOutput($key, $context, $exp)
+    public function testMessageWithContext($msg, $context, $exp)
     {
-        $this->getLogger()->debug('{'.$key.'}', array( $key => $context));
+        $this->getLogger()->alert('{'.$msg.'}', array( $msg => $context));
 
-        $this->assertEquals(array('debug ' . $exp), $this->getLogs());
+        $this->assertEquals(array('alert ' . $exp), $this->getLogs());
     }
 
-    public function providerContextes()
+    public function providerMsgContextes()
     {
         $obj = new \stdClass();
         $obj->baz = 'biz';
@@ -64,14 +64,13 @@ abstract class TestCase extends LoggerInterfaceTest
         $obj->nested->buz ='bez';
 
         return array(
+            array('null', null, ''),
             array('bool1', true, '[bool: 1]'),
             array('bool2', false, '[bool: 0]'),
             array('string', 'Foo', 'Foo'),
             array('int', 0, '0'),
             array('float', 0.5, '0.5'),
-
             array('resource', fopen('php://memory', 'r'), '[type: resource]'),
-            array('null', null, ''),
 
             // objects
             array('obj__toString', new DummyTest(), '__toString!'),
@@ -83,6 +82,49 @@ abstract class TestCase extends LoggerInterfaceTest
             array('nested_asso', array('foo'=>1,'bar'=>'2'), '{"foo":1,"bar":"2"}'),
             array('nested_object', array(new DummyTest), '[{"foo":"bar"}]'),
             array('nested_unicode', array('ƃol-xᴉdɐ'), '["\u0183ol-x\u1d09d\u0250"]'),
+        );
+    }
+
+    /**
+     * @dataProvider providerContextesOnly
+     */
+    public function testContextOnly($key, $context, $exp)
+    {
+        $this->getLogger()->debug($context);
+
+        $this->assertEquals(array('debug ' . $exp), $this->getLogs());
+    }
+
+    public function providerContextesOnly()
+    {
+        $obj = new \stdClass();
+        $obj->baz = 'biz';
+        $obj->nested = new \stdClass();
+        $obj->nested->buz ='bez';
+
+        return array(
+            array('null', null, ''),
+
+            // objects
+            array('obj__toString', new DummyTest(), '__toString!'),
+            array('obj_stdClass', new \stdClass(), '{}'),
+            array('obj_instance', $obj, '{"baz":"biz","nested":{"buz":"bez"}}'),
+            
+            // nested arrays...
+            array('nested_values', array('foo','bar'), '["foo","bar"]'),
+            array('nested_asso', array('foo'=>1,'bar'=>'2'), '{"foo":1,"bar":"2"}'),
+            array('nested_object', array(new DummyTest), '[{"foo":"bar"}]'),
+            array('nested_unicode', array('ƃol-xᴉdɐ'), '["\u0183ol-x\u1d09d\u0250"]')
+        );
+    }
+
+    public function testContextIsAnException()
+    {
+        $this->getLogger()->critical( new \Exception('Boo!') );
+        
+        $this->assertStringStartsWith(
+            "critical exception 'Exception' with message 'Boo!' in ",
+            $this->getLogs()[0]
         );
     }
 
