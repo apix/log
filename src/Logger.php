@@ -41,7 +41,13 @@ class Logger extends AbstractLogger
             if ($logger instanceof Logger\LoggerInterface) {
                 $this->loggers[] = $logger;
             } else {
-                throw new InvalidArgumentException('xx');
+                throw new InvalidArgumentException(
+                    sprintf(
+                        '"%s" must interface "%s".',
+                        get_class($logger),
+                        __NAMESPACE__ . '\Logger\LoggerInterface'
+                    )
+                );
             }
         }
     }

@@ -114,7 +114,17 @@ abstract class TestCase extends LoggerInterfaceTest
             array('nested_values', array('foo','bar'), '["foo","bar"]'),
             array('nested_asso', array('foo'=>1,'bar'=>'2'), '{"foo":1,"bar":"2"}'),
             array('nested_object', array(new DummyTest), '[{"foo":"bar"}]'),
-            array('nested_unicode', array('ƃol-xᴉdɐ'), '["\u0183ol-x\u1d09d\u0250"]'),
+            array('nested_unicode', array('ƃol-xᴉdɐ'), '["\u0183ol-x\u1d09d\u0250"]')
+        );
+    }
+
+    public function testContextIsAnException()
+    {
+        $this->getLogger()->critical( new \Exception('Boo!') );
+        
+        $this->assertStringStartsWith(
+            "critical exception 'Exception' with message 'Boo!' in ",
+            $this->getLogs()[0]
         );
     }
 
