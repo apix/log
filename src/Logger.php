@@ -57,13 +57,9 @@ class Logger extends AbstractLogger
     {
         $i = $this->getFirstLoggerIndex( $log['code'] );
         if (false !== $i) {
-            // invoke the processors
-            // foreach ($this->processors as $processor) {
-            //     $log = call_user_func($processor, $log);
-            // }
-
             while (
-                isset($this->loggers[$i]) && $this->loggers[$i]->process( $log )
+                isset($this->loggers[$i])
+                && $this->loggers[$i]->process( $log )
             ) {
                 $i++;
             }
