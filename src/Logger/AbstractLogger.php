@@ -52,7 +52,8 @@ abstract class AbstractLogger extends AbsPsrLogger
     /**
      * Gets the named level code.
      *
-     * @return string                   $name
+     * @param string                   $name The name of a PSR-3 level.
+     * @return integer
      * @throws InvalidArgumentException
      */
     public static function getLevelCode($name)
@@ -123,14 +124,25 @@ abstract class AbstractLogger extends AbsPsrLogger
      * Sets the minimal level at which this logger will be triggered.
      *
      * @param  string $name
+     * @param  boolean $cascading (default to true)
      * @return self
      */
     public function setMinLevel($name, $cascading=true)
     {
-        $this->min_level = (int) static::getLevelCode($name);
+        $this->min_level = (int) static::getLevelCode(strtolower($name));
         $this->cascading = (boolean) $cascading;
 
         return $this;
+    }
+
+    /**
+     * Returns the minimal level at which this logger will be triggered.
+     *
+     * @return integer
+     */
+    public function getMinLevel()
+    {
+        return $this->min_level;
     }
 
     /**
@@ -139,12 +151,12 @@ abstract class AbstractLogger extends AbsPsrLogger
      * @param  bool $bool
      * @return self
      */
-    public function isCascading($bool)
-    {
-        $this->cascading = (boolean) $bool;
+    // public function isCascading($bool)
+    // {
+    //     $this->cascading = (boolean) $bool;
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
     /**
      * Interpolates context values into the message placeholders.

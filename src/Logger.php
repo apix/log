@@ -25,10 +25,10 @@ class Logger extends AbstractLogger
 {
 
     /**
-     * Holds all the registered loggers.
-     * @var Logger\LoggerInterface[] FIFO order.
+     * Holds all the registered loggers as buckets.
+     * @var Logger\LoggerInterface[].
      */
-    protected $loggers = array();
+    protected $buckets = array();
 
     /**
      * Constructor.
@@ -39,7 +39,7 @@ class Logger extends AbstractLogger
     {
         foreach ($loggers as $key => $logger) {
             if ($logger instanceof Logger\LoggerInterface) {
-                $this->loggers[] = $logger;
+                $this->buckets[] = $logger;
             } else {
                 throw new InvalidArgumentException(
                     sprintf(
@@ -50,6 +50,7 @@ class Logger extends AbstractLogger
                 );
             }
         }
+        $this->sortBuckets();
     }
 
     /**
@@ -61,11 +62,11 @@ class Logger extends AbstractLogger
      */
     public function process(array $log)
     {
-        $i = $this->getFirstLoggerIndex( $log['code'] );
+        $i = $this->getIndexFirstBucket( $log['code'] );
         if (false !== $i) {
             while (
-                isset($this->loggers[$i])
-                && $this->loggers[$i]->process( $log )
+                isset($this->buckets[$i])
+                && $this->buckets[$i]->process( $log )
             ) {
                 $i++;
             }
@@ -77,14 +78,14 @@ class Logger extends AbstractLogger
     }
 
     /**
-     * Checks if any loggers can hanle the given code.
+     * Checks if any log bucket can hanle the given code.
      *
      * @param  integer       $code
      * @return integer|false
      */
-    public function getFirstLoggerIndex($code)
+    protected function getIndexFirstBucket($code)
     {
-        foreach ($this->loggers as $key => $logger) {
+        foreach ($this->buckets as $key => $logger) {
             if ( $logger->isHandling( $code ) ) {
                 return $key;
             }
@@ -116,10 +117,36 @@ class Logger extends AbstractLogger
      * Adds a logger.
      *
      * @param Logger\LoggerInterface $logger
+     * @return boolean Returns TRUE on success or FALSE on failure.
      */
     public function add(Logger\LoggerInterface $logger)
     {
-        $this->loggers[] = $logger;
+        $this->buckets[] = $logger;
+        
+        return $this->sortBuckets();
+    }
+
+    /**
+     * Sorts the log buckets, prioritizes top-down by minimal level.
+     * Beware: Exisiting level will be in FIFO order.
+     * 
+     * @return boolean Returns TRUE on success or FALSE on failure.
+     */
+    protected function sortBuckets()
+    {
+        return usort($this->buckets, function($a, $b) {
+            return $a->getMinLevel() < $b->getMinLevel();
+        });
+    }
+
+    /**
+     *  Returns all the registered log buckets.
+     *
+     * @return array
+     */
+    public function getBuckets()
+    {
+        return $this->buckets;
     }
 
 }
