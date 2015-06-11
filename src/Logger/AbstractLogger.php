@@ -122,9 +122,10 @@ abstract class AbstractLogger extends AbsPsrLogger
 
     /**
      * Sets the minimal level at which this logger will be triggered.
+     * NOTE: considering wether to rename this to `interceptAt`
      *
      * @param  string $name
-     * @param  boolean $cascading (default to true)
+     * @param  boolean $cascading Should the logs continue pass that level (default to true)
      * @return self
      */
     public function setMinLevel($name, $cascading=true)
@@ -146,17 +147,17 @@ abstract class AbstractLogger extends AbsPsrLogger
     }
 
     /**
-     * Sets the minimal level at which this handler will be triggered.
+     * Sets wether to enable/disable cascading.
      *
      * @param  bool $bool
      * @return self
      */
-    // public function isCascading($bool)
-    // {
-    //     $this->cascading = (boolean) $bool;
+    public function setCascading($bool)
+    {
+        $this->cascading = (boolean) $bool;
 
-    //     return $this;
-    // }
+        return $this;
+    }
 
     /**
      * Interpolates context values into the message placeholders.

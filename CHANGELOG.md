@@ -1,5 +1,9 @@
 # APIx-log changelog
 
+#### Version 1.1.1 (11-Jun-2015)
+- Updated the REAME.md
+- Fixed setCascading (just uncommented).
+
 #### Version 1.1.0 (11-Jun-2015)
 - Fixed a PHP 5.3 specific syntax error (unit-test)
 - Renamed `Apix\Log\Logger\Null` to `Apix\Log\Logger\Nil`. 'Null' as a classname is now reserved to PHP7 usage, see [PHP RFC: Reserve More Types in PHP 7](https://wiki.php.net/rfc/reserve_more_types_in_php_7)

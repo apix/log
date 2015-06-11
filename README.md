@@ -12,48 +12,74 @@ Feel free to comment, send pull requests and patches...
 
 Basic usage (*standalone*)
 -----------
+```php
+use Apix\Log;
+
+// Bucket for log superior or equal to `critical`
+$urgent_logger = new Logger\Mail('franck@foo.bar');
+$urgent_logger->setMinLevel('critical');    // set the minimal level
+```
+
+This logger/bucket will intercepts `critical`, `alert` and `emergency` logs.
+
+Eventually to log an event, use:
 
 ```php
-  use Apix\Log;
-
-  $logger = new Logger\File('/var/log/apix.log');
-  $logger->setMinLevel('alert'); // same as Psr\Log\LogLevel::ALERT
-
-  // then later, just push/send an alert...  
-  $logger->alert('Running out of {product} ', array('product'=>'beer'));
+$urgent_logger->alert('Running out of {stuff}', ['stuff' => 'beers']);
 ```
 
 Advanced usage (*multi-logs dispatcher*)
 --------------
+Okay. Lets create some additional loggers/buckets -- one generic, another one for development.
 
 ```php
-  use Apix\Log;
-  
-  $logger = new Logger();
-  
-  // The log bucket for critical, alert and emergency.
-  $urgent_log = new Logger\Mail('foo@bar.boo');
-  $urgent_log->setMinLevel('critical');  // same Psr\Log\LogLevel::CRITICAL
-  
-  // The log bucket for notice, warning and error. 
-  $prod_log = new Log\Logger\File('/var/log/apix_prod.log');
-  $prod_log->setMinLevel('notice');  // same Psr\Log\LogLevel::NOTICE
-  
-  $this->logger->add($urgent_log);
-  $this->logger->add($prod_log);
+// Bucket for log >= to `notice`
+$app_logger = new Logger\File('/var/log/apix_app.log');
+$app_logger->setMinLevel('notice')
+            ->setCascading(False);    // stop the log here if intercepted
 
-  if (DEBUG) {
-      // The develop log bucket for info and debug
-      $dev_log = new Log\Logger\File('/tmp/apix_develop.log');
-      $dev_log->setMinLevel('debug');  // same as Psr\Log\LogLevel::DEBUG
+// The main logger object (injecting the buckets)
+$logger = new Logger( array($urgent_logger, $app_logger) );
 
-      $logger->add($dev_log);
-  }
+if(DEBUG) {
+  // Bucket log just for `info` and `debug`
+  $debug_logger = new Log\Logger\File('/tmp/apix_develop.log');
+  $debug_logger->setMinLevel('debug');
 
-  // then (later) notify the loggers...
-  $this->logger->notice('Some notice...');
-  $this->logger->critical('Blahh blahh...');
+  $logger->add($debug_logger);    // another way to inject a bucket
+}
 ```
+
+Note that `setCascading()` was set to False (default is True) which means that any intercepted log entries won't continue downstream pass that particular bucket. So in that case, the debug bucket will only get `info` and `debug` logs.
+
+Finally, you can push some log entries in the following manners:
+
+```php
+$logger->notice('Something happen -> {ctx}', array('ctx' => array(...) ) );
+  
+$e = New \Exception('boo!');
+$logger->critical('OMG saw {exception}', [ 'exception' => $e ]);
+
+$logger->debug($e);     // or push an object, an array directly
+```
+
+Log levels
+----------
+The eight [RFC 5424][] levels of logs are supported, in order:
+
+Severity  | Description
+----------|------------
+emergency | System level failure (not application level)
+alert     | Failure that require immediate attention
+critical  | Serious failure at the application level
+error     | Runtime errors, used to log unhandled exceptions
+warning   | May indicate that an error will occur if action is not taken
+notice    | Events that are unusual but not error conditions
+info      | Normal operational messages (no action required)
+debug     | Verbose infos useful to developers for debugging purposes
+
+[PSR-3]: http://tools.ietf.org/html/rfc5424
+[RFC 5424]: http://tools.ietf.org/html/rfc5424
 
 Installation
 ------------------------
