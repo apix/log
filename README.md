@@ -20,9 +20,9 @@ $urgent_logger = new Logger\Mail('franck@foo.bar');
 $urgent_logger->setMinLevel('critical');    // set the minimal level
 ```
 
-This logger/bucket will intercepts `critical`, `alert` and `emergency` logs.
+This logger/bucket will intercept `critical`, `alert` and `emergency` logs.
 
-Eventually to log an event, use:
+To log an event, use:
 
 ```php
 $urgent_logger->alert('Running out of {stuff}', ['stuff' => 'beers']);
@@ -36,31 +36,31 @@ Okay. Lets create some additional loggers/buckets -- one generic, another one fo
 // Bucket for log >= to `notice`
 $app_logger = new Logger\File('/var/log/apix_app.log');
 $app_logger->setMinLevel('notice')
-            ->setCascading(False);    // stop the log here if intercepted
+           ->setCascading(False);    // stop the log here if intercepted
 
 // The main logger object (injecting the buckets)
 $logger = new Logger( array($urgent_logger, $app_logger) );
 
 if(DEBUG) {
   // Bucket log just for `info` and `debug`
-  $debug_logger = new Log\Logger\File('/tmp/apix_develop.log');
+  $debug_logger = new Logger\File('/tmp/apix_develop.log');
   $debug_logger->setMinLevel('debug');
 
   $logger->add($debug_logger);    // another way to inject a bucket
 }
 ```
 
-Note that `setCascading()` was set to False (default is True) which means that any intercepted log entries won't continue downstream pass that particular bucket. So in that case, the debug bucket will only get `info` and `debug` logs.
+Note that `setCascading()` was set to False (default is True) which means that any intercepted log entries won't continue downstream past that particular bucket. So in that case, the debug bucket will only get `info` and `debug` log entries.
 
-Finally, you can push some log entries in the following manners:
+Finally, you can push some log entries in the following manner:
 
 ```php
-$logger->notice('Something happen -> {ctx}', array('ctx' => array(...) ) );
+$logger->notice('Something happened -> {ctx}', array('ctx' => array(...) ) );
   
 $e = New \Exception('boo!');
 $logger->critical('OMG saw {exception}', [ 'exception' => $e ]);
 
-$logger->debug($e);     // or push an object, an array directly
+$logger->debug($e);     // or push an object or an array directly
 ```
 
 Log levels
@@ -70,13 +70,13 @@ The eight [RFC 5424][] levels of logs are supported, in order:
 Severity  | Description
 ----------|------------
 emergency | System level failure (not application level)
-alert     | Failure that require immediate attention
+alert     | Failure that requires immediate attention
 critical  | Serious failure at the application level
 error     | Runtime errors, used to log unhandled exceptions
 warning   | May indicate that an error will occur if action is not taken
 notice    | Events that are unusual but not error conditions
 info      | Normal operational messages (no action required)
-debug     | Verbose infos useful to developers for debugging purposes
+debug     | Verbose info useful to developers for debugging purposes
 
 [PSR-3]: http://tools.ietf.org/html/rfc5424
 [RFC 5424]: http://tools.ietf.org/html/rfc5424
@@ -91,7 +91,7 @@ Installation
     ```json
     {
       "require": {
-        "apix/log": "1.0.*"
+        "apix/log": "1.1.*"
       }
     }
     ```
