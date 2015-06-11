@@ -38,7 +38,7 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
      * @expectedException InvalidArgumentException
      * @expectedExceptionMessage "stdClass" must interface "Apix\Log\Logger\LoggerInterface"
      */
-    public function testConstructorThrowsException()
+    public function testConstructorThrowsInvalidArgumentException()
     {
         new Logger( array( new \StdClass() ) );
     }
@@ -82,9 +82,9 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
         Logger::getPsrLevelName('non-existant');
     }
 
-    public function _getMocklogger($r = array())
+    protected function _getMocklogger($r = array())
     {
-        return $this->getMock('Apix\Log\Logger\Null', $r);
+        return $this->getMock('Apix\Log\Logger\Nil', $r);
     }
 
     public function testWriteIsCalled()
@@ -122,54 +122,78 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
         $this->logger->warning('test');
     }
 
-    public function TODO_testFunctional()
+    protected function _getFilledInLogBuckets($cascading=true)
     {
-        // $this->expectOutputString('foo');
+        // the log bucket for everything (starts at 0 Debug level).
+        $dev_log = new Logger\Runtime();
+        $dev_log->setMinLevel('debug', $cascading);       
 
-        // $l1 = new Logger\Sapi('/tmp/functional-test.log');
+        // The log bucket for Critical, Alert and Emergency.
+        $urgent_log = new Logger\Runtime();
+        $urgent_log->setMinLevel('critical', $cascading);
 
-        $l1 = new Logger\File('/tmp/functional-test.log');
-        // $l1->isCascading(true);
+        // The log bucket that starts at Notice level 
+        $notices_log = new Logger\Runtime();
+        $notices_log->setMinLevel('notice', $cascading);
 
-        $l2 = new Logger\Mail('d@d.c');
-        // $l2 = new Logger\Sapi('');
+        $this->logger->add($notices_log);
+        $this->logger->add($urgent_log);
+        $this->logger->add($dev_log);
 
-        $l2->setMinLevel( LogLevel::ALERT );
-        $l2->isCascading(true);
+        // Log some stuff...
+        $this->logger->emergency('foo');
+        $this->logger->alert('foo');
+        $this->logger->critical('foo');
 
-        $this->logger->add($l2);
-        $this->logger->add($l1);
+        $this->logger->error('foo');
+        $this->logger->warning('foo');
+        $this->logger->notice('foo');
 
-        $this->logger->debug('test filed logged');
-        $this->logger->alert('test by email {bb}', array('bb'=>123));
+        $this->logger->info('foo');
+        $this->logger->debug('foo');
+
+        return $this->logger->getBuckets();
     }
 
-    /**
-     * @group todo
-     */
-    public function testFunctionalExample()
+    public function testAddLoggersAreAlwaysSortedbyMinimalLevel()
     {
-        $logger = new Logger();
+        $buckets = $this->_getFilledInLogBuckets();
 
-        // the log bucket for critical, alert and emergency
-        $mail_log = new Logger\Mail('foo@bar.boo');
-        $mail_log->setMinLevel('critical');
-        $this->logger->add($mail_log);
+        $this->assertCount(3, $buckets);
 
-        // the log bucket for notice, warning and error
-        $prod_log = new Logger\File('/tmp/apix_prod.log');
-        $prod_log->setMinLevel('notice');
-        $this->logger->add($prod_log);
+        $this->assertEquals(5, $buckets[0]->getMinLevel(), 'Critical level');
+        $this->assertEquals(2, $buckets[1]->getMinLevel(), 'Notice level');
+        $this->assertEquals(0, $buckets[2]->getMinLevel(), 'Debug level');
+    }
 
-        if (true) {
-          // the log bucket for info and debug
-          $dev_log = new Logger\File('/tmp/apix_dev.log');
-          $this->logger->add($dev_log);
-        }
+    public function testLogEntriesAreCascasdingDown()
+    {
+        $buckets = $this->_getFilledInLogBuckets();
 
-        $this->logger->debug('test filed logged');
-        $this->logger->alert('test by email {bb}', array('bb'=>123));
+        $this->assertCount(
+            3, $buckets[0]->getItems(), 'Entries at Critical minimal level.'
+        );
+        $this->assertCount(
+            6, $buckets[1]->getItems(), 'Entries at Notice minimal level.'
+        );
+        $this->assertCount(
+            8, $buckets[2]->getItems(), 'Entries at Debug minimal level.'
+        );
+    }
 
+    public function testLogEntriesAreNotCascasding()
+    {
+        $buckets = $this->_getFilledInLogBuckets(false);
+
+        $this->assertCount(
+            3, $buckets[0]->getItems(), 'Entries at Critical minimal level.'
+        );
+        $this->assertCount(
+            3, $buckets[1]->getItems(), 'Entries at Notice minimal level.'
+        );
+        $this->assertCount(
+            2, $buckets[2]->getItems(), 'Entries at Debug minimal level.'
+        );
     }
 
 }

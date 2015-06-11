@@ -13,12 +13,12 @@
 namespace Apix\Log\Logger;
 
 /**
- * Null log wrapper.
+ * Nil (Null) log wrapper.
  *
  * @author Franck Cassedanne <franck at ouarz.net>
  * @codeCoverageIgnore
  */
-class Null extends AbstractLogger implements LoggerInterface
+class Nil extends AbstractLogger implements LoggerInterface
 {
 
     /**
