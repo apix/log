@@ -122,9 +122,10 @@ abstract class TestCase extends LoggerInterfaceTest
     {
         $this->getLogger()->critical( new \Exception('Boo!') );
         
+        $logs = $this->getLogs();
         $this->assertStringStartsWith(
             "critical exception 'Exception' with message 'Boo!' in ",
-            $this->getLogs()[0]
+            $logs[0]
         );
     }
 
