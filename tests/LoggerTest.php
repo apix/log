@@ -196,4 +196,27 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function testSetCascading()
+    {
+        $dev_log = new Logger\Runtime();
+        $dev_log->setMinLevel('debug');
+        $this->logger->add($dev_log);
+        
+        $app_log = new Logger\Runtime();
+        $app_log->setMinLevel('alert');
+        $this->logger->add($app_log);
+        
+        $buckets = $this->logger->getBuckets();
+
+        $this->logger->alert('test 1');
+        $this->assertCount(1, $buckets[0]->getItems());
+        $this->assertCount(1, $buckets[1]->getItems());
+
+        $app_log->setCascading(false);
+        $this->logger->alert('test 2');
+
+        $this->assertCount(2, $buckets[0]->getItems(), 'app_log should now have 2');
+        $this->assertCount(1, $buckets[1]->getItems(), 'dev_log should still have 1');
+    }
+
 }
