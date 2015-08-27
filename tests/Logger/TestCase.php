@@ -123,8 +123,13 @@ abstract class TestCase extends LoggerInterfaceTest
         $this->getLogger()->critical( new \Exception('Boo!') );
         
         $logs = $this->getLogs();
+        
+        $prefix = version_compare(PHP_VERSION, '7.0.0', '>=')
+                ? "critical Exception: Boo! in "
+                : "critical exception 'Exception' with message 'Boo!' in ";
+        
         $this->assertStringStartsWith(
-            "critical exception 'Exception' with message 'Boo!' in ",
+            $prefix,
             $logs[0]
         );
     }
