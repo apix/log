@@ -124,7 +124,7 @@ abstract class TestCase extends LoggerInterfaceTest
         
         $logs = $this->getLogs();
         
-        $prefix = version_compare(PHP_VERSION, '7.0.0', '>=')
+        $prefix = version_compare(PHP_VERSION, '7.0.0-dev', '>=')
                 ? "critical Exception: Boo! in "
                 : "critical exception 'Exception' with message 'Boo!' in ";
         
