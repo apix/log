@@ -15,7 +15,7 @@ namespace Apix\Log\Logger;
 use Psr\Log\InvalidArgumentException;
 
 /**
- * Minimalist file basd logger implementing PSR-3 relying on PHP's error_log().
+ * Minimalist file based logger implementing PSR-3 relying on PHP's error_log().
  *
  * @author Franck Cassedanne <franck at ouarz.net>
  */
@@ -26,10 +26,11 @@ class File extends ErrorLog implements LoggerInterface
      * Constructor.
      *
      * @param  string                   $file The file to append to.
-     * @throws InvalidArgumentException If the file is not writeable.
+     * @throws InvalidArgumentException If the file cannot be created or written.
      */
     public function __construct($file)
     {
+        $file = (string) $file;
         if (!file_exists($file) && !touch($file)) {
             throw new InvalidArgumentException(
                 sprintf('Log file "%s" cannot be created', $file), 1
@@ -37,7 +38,7 @@ class File extends ErrorLog implements LoggerInterface
         }
         if (!is_writable($file)) {
             throw new InvalidArgumentException(
-                sprintf('Log file "%s" is not writeable', $file), 2
+                sprintf('Log file "%s" is not writable', $file), 2
             );
         }
 
