@@ -45,18 +45,18 @@ class FileTest extends TestCase
      */
     public function testThrowsInvalidArgumentExceptionWhenCannotCreate()
     {
-        if (version_compare(PHP_VERSION, '5.4.0', '<')) {
-            $this->markTestSkipped(
-              'This test failed on PHP53'
-            );
-        }
+        // if (version_compare(PHP_VERSION, '5.4.0', '<')) {
+        //     $this->markTestSkipped(
+        //       'This test failed on PHP53'
+        //     );
+        // }
 
         new Logger\File(null);
     }
 
     /**
      * @expectedException Psr\Log\InvalidArgumentException
-     * @expectedExceptionMessage Log file "/" is not writeable
+     * @expectedExceptionMessage Log file "/" is not writable
      * @expectedExceptionCode 2
      */
     public function testThrowsInvalidArgumentExceptionWhenProtected()
