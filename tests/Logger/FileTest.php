@@ -43,14 +43,8 @@ class FileTest extends TestCase
      * @expectedExceptionMessage Log file "" cannot be created
      * @expectedExceptionCode 1
      */
-    public function testThrowsInvalidArgumentExceptionWhenCannotCreate()
+    public function testThrowsInvalidArgumentExceptionWhenFileCannotBeCreated()
     {
-        // if (version_compare(PHP_VERSION, '5.4.0', '<')) {
-        //     $this->markTestSkipped(
-        //       'This test failed on PHP53'
-        //     );
-        // }
-
         new Logger\File(null);
     }
 
