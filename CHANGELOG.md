@@ -1,7 +1,14 @@
 # APIx Log changelog
 
+#### Version 1.1.2 (28-Aug-2015)
+- Updated the README.md
+- Added HHVM support.
+- Updated PHPUnit to 4.8 version.
+- Added PHP7 support.
+- Made Travis faster (using Docker containers and skipping allowable failures).
+
 #### Version 1.1.1 (11-Jun-2015)
-- Updated the REAME.md
+- Updated the README.md
 - Fixed setCascading (just uncommented).
 
 #### Version 1.1.0 (11-Jun-2015)
