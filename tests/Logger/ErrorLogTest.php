@@ -22,6 +22,13 @@ class ErrorLogTest extends TestCase
 
     protected function setUp()
     {
+        // HHVM support
+        // @see: https://github.com/facebook/hhvm/issues/3558
+        if (defined('HHVM_VERSION')) {
+            ini_set('log_errors', 'On');
+            ini_set('error_log', $this->dest);
+        }
+
         ini_set('error_log', $this->dest);
     }
 
