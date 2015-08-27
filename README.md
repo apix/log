@@ -5,7 +5,7 @@ APIx Log, very thin PSR-3 logger
 Minimalist **PSR-3** compliant logger.
 
 * Unit **tested** and compliant with PSR0, PSR1 and PSR2.
-* Continuously integrated against **PHP 5.3**, **5.4**, **5.5** and **5.6**.
+* Continuously integrated against **PHP 5.3**, **5.4**, **5.5**, **5.6**, **7.0** and **HHVM**.
 * Available as a **[Composer](http://https://packagist.org/packages/apix/log)** and as a **[PEAR](http://pear.ouarz.net)** package.
 
 Feel free to comment, send pull requests and patches...
