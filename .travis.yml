@@ -8,8 +8,8 @@ php:
   - 5.5
   - 5.6
   - 7.0
-  - nightly
   - hhvm
+  - nightly
 
 before_script:
   - travis_retry composer self-update && composer install --dev --no-interaction --prefer-source
@@ -34,5 +34,4 @@ after_script:
 matrix:
   allow_failures:
     - php: nightly
-    - php: hhvm
   fast_finish: true
