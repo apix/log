@@ -30,8 +30,7 @@ class File extends ErrorLog implements LoggerInterface
      */
     public function __construct($file)
     {
-        $file = (string) $file;
-        if (!file_exists($file) && !touch($file)) {
+        if (null === $file || !file_exists($file) && !touch($file)) {
             throw new InvalidArgumentException(
                 sprintf('Log file "%s" cannot be created', $file), 1
             );
