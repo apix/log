@@ -6,7 +6,7 @@ Minimalist **PSR-3** compliant logger.
 
 * Unit **tested** and compliant with PSR0, PSR1 and PSR2.
 * Continuously integrated against **PHP 5.3**, **5.4**, **5.5**, **5.6**, **7.0** and **HHVM**.
-* Available as a **[Composer](http://https://packagist.org/packages/apix/log)** and as a **[PEAR](http://pear.ouarz.net)** package.
+* Available as a **[Composer](https://packagist.org/packages/apix/log)** ~~and as a [PEAR](http://pear.ouarz.net)~~ package.
 
 Feel free to comment, send pull requests and patches...
 
@@ -84,39 +84,14 @@ debug     | Verbose info useful to developers for debugging purposes
 Installation
 ------------------------
 
-* If you are creating a component that relies on APIx Log locally:
-
-  * either update your **`composer.json`** file:
-
-    ```json
-    {
-      "require": {
-        "apix/log": "1.1.*"
-      }
-    }
-    ```
-
-  * or update your **`package.xml`** file as follow:
-
-    ```xml
-    <dependencies>
-      <required>
-        <package>
-          <name>apix_log</name>
-          <channel>pear.ouarz.net</channel>
-          <min>1.0.0</min>
-          <max>1.999.9999</max>
-        </package>
-      </required>
-    </dependencies>
-    ```
-* For a system-wide installation using PEAR:
-
-    ```
-    sudo pear channel-discover pear.ouarz.net
-    sudo pear install --alldeps ouarz/apix_log
-    ```
-For more details see [pear.ouarz.net](http://pear.ouarz.net).
+Install the current major version using Composer with (recommended)
+```
+$ composer require apix/log:1.1.*
+```
+Or install the latest stable version with
+```
+$ composer require apix/log
+```
 
 License
 -------
