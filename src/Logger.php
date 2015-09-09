@@ -140,7 +140,7 @@ class Logger extends AbstractLogger
     }
 
     /**
-     *  Returns all the registered log buckets.
+     * Returns all the registered log buckets.
      *
      * @return array
      */
