@@ -198,6 +198,19 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
 
     public function testSetCascading()
     {
+        $logger = new Logger\Runtime();
+        $this->assertTrue(
+            \PHPUnit_Framework_Assert::readAttribute($logger, "cascading"),
+            "The 'cascading' propertie should be True by default"
+        );
+        $logger->setCascading(false);
+        $this->assertFalse(
+            \PHPUnit_Framework_Assert::readAttribute($logger, "cascading")
+        );
+    }
+
+    public function testCascading()
+    {
         $dev_log = new Logger\Runtime();
         $dev_log->setMinLevel('debug');
         $this->logger->add($dev_log);
@@ -217,6 +230,34 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertCount(2, $buckets[0]->getItems(), 'app_log should now have 2');
         $this->assertCount(1, $buckets[1]->getItems(), 'dev_log should still have 1');
+    }
+
+    public function testSetDeferred()
+    {
+        $logger = new Logger\Runtime();
+        $this->assertFalse(
+            \PHPUnit_Framework_Assert::readAttribute($logger, "deferred"),
+            "The 'deferred' propertie should be False by default"
+        );
+        $logger->setDeferred(true);
+        $this->assertTrue(
+            \PHPUnit_Framework_Assert::readAttribute($logger, "deferred")
+        );
+    }
+
+    public function testDeferring()
+    {
+        $this->logger = new Logger\Runtime();
+        $this->logger->alert('test 1');
+
+        $this->assertCount(1, $this->logger->getItems());
+
+        $this->logger->setDeferred(true);
+        $this->logger->alert('test 2');
+        $this->assertCount(1, $this->logger->getItems());
+        $this->assertCount(1, $this->logger->getDeferredLogs());
+
+        $this->logger = null; // call destruct...
     }
 
 }
