@@ -242,14 +242,15 @@ abstract class AbstractLogger extends AbsPsrLogger
     final public function __destruct()
     {
         if ($this->deferred && !empty($this->deferred_logs)) {
-            $this->write(
-                array(
-                    'msg' => join(
-                            $this->log_separator,
-                            array_column($this->deferred_logs, 'msg')
-                        )
-                )
+            
+            $msgs = array_map(
+                function($e) { return $e['msg']; },
+                $this->deferred_logs
             );
+
+            $this->write(array(
+                'msg' => join($this->log_separator, $msgs)
+            ));
         }
     }
 
