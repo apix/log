@@ -139,7 +139,6 @@ abstract class AbstractLogger extends AbsPsrLogger
 
     /**
      * Sets the minimal level at which this logger will be triggered.
-     * NOTE: considering wether to rename this to `interceptAt`
      *
      * @param  string $name
      * @param  boolean $cascading Should the logs continue pass that level (default to true)
