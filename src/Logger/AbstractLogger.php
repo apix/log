@@ -62,6 +62,12 @@ abstract class AbstractLogger extends AbsPsrLogger
     protected $deferred_logs = array();
 
     /**
+     * Holds the log separator.
+     * @var string
+     */
+    public $log_separator = PHP_EOL;
+
+    /**
      * Gets the named level code.
      *
      * @param string                   $name The name of a PSR-3 level.
@@ -95,7 +101,8 @@ abstract class AbstractLogger extends AbsPsrLogger
             'name' => $level,
             'code' => static::getLevelCode($level),
             'msg'  => $message,
-            'ctx'  => $context
+            'ctx'  => $context,
+            'time' => time()
         );
 
         $this->process($log);
@@ -111,7 +118,7 @@ abstract class AbstractLogger extends AbsPsrLogger
     public function process(array $log)
     {
         $log['msg'] = sprintf('[%s] %s %s',
-                        date('Y-m-d H:i:s'),
+                        date('Y-m-d H:i:s', $log['time']),
                         strtoupper($log['name']),
                         $this->interpolate($log['msg'], $log['ctx'])
                     );
@@ -235,9 +242,14 @@ abstract class AbstractLogger extends AbsPsrLogger
     final public function __destruct()
     {
         if ($this->deferred && !empty($this->deferred_logs)) {
-            foreach($this->deferred_logs as $log) {
-                $this->write($log);
-            }            
+            $this->write(
+                array(
+                    'msg' => join(
+                            $this->log_separator,
+                            array_column($this->deferred_logs, 'msg')
+                        )
+                )
+            );
         }
     }
 

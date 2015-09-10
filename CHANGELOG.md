@@ -1,5 +1,8 @@
 # APIx Log changelog
 
+#### Version 1.1.4 (10-Sep-2015)
+- Bug fix.  
+
 #### Version 1.1.3 (10-Sep-2015)
 - Added `setDeferred` so processing of logs happen at destruction time on a bucket and/or logger level. 
 - Updated the README.md accordingly.
