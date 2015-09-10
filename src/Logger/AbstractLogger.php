@@ -50,7 +50,7 @@ abstract class AbstractLogger extends AbsPsrLogger
     protected $cascading = true;
 
     /**
-     * Whether this logger will be deferred (send the logs on destruct).
+     * Whether this logger will be deferred (push the logs at destruct time).
      * @var bool
      */
     protected $deferred = false;
@@ -92,11 +92,10 @@ abstract class AbstractLogger extends AbsPsrLogger
         }
 
         $log = array(
-            'name'      => $level,
-            'code'      => static::getLevelCode($level),
-            'msg'       => $message,
-            'ctx'       => $context,
-            'deferred'  => $this->deferred
+            'name' => $level,
+            'code' => static::getLevelCode($level),
+            'msg'  => $message,
+            'ctx'  => $context
         );
 
         $this->process($log);
@@ -117,7 +116,7 @@ abstract class AbstractLogger extends AbsPsrLogger
                         $this->interpolate($log['msg'], $log['ctx'])
                     );
 
-        if ($log['deferred']) {
+        if ($this->deferred) {
             $this->deferred_logs[] = $log;
         } else {
             $this->write($log);
@@ -221,6 +220,16 @@ abstract class AbstractLogger extends AbsPsrLogger
     }
 
     /**
+     * Returns all the deferred logs.
+     *
+     * @return array
+     */
+    public function getDeferredLogs()
+    {
+        return $this->deferred_logs;
+    }
+
+    /**
      * Process any accumulated deferred log if there are any.
      */
     final public function __destruct()
@@ -230,16 +239,6 @@ abstract class AbstractLogger extends AbsPsrLogger
                 $this->write($log);
             }            
         }
-    }
-
-    /**
-     * Returns the deferred logs.
-     *
-     * @return array
-     */
-    public function getDeferredLogs()
-    {
-        return $this->deferred_logs;
     }
 
 }
