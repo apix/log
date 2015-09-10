@@ -63,7 +63,9 @@ class ErrorLog extends AbstractLogger implements LoggerInterface
      */
     public function write(array $log)
     {
-        $msg = $this->type == self::FILE ? $log['msg'] . PHP_EOL :  $log['msg'];
+        $msg = $this->deferred || $this->type == self::FILE
+                ? $log['msg'] . PHP_EOL
+                : $log['msg'];
 
         return error_log($msg, $this->type, $this->destination, $this->headers);
     }

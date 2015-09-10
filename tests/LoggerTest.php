@@ -45,20 +45,19 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
 
     public function testConstructor()
     {
-        $e = $this->_getMocklogger(array('process'));
-        $e->setMinLevel( LogLevel::ERROR );
+        $err_logger = $this->_getMocklogger(array('process'));
+        $err_logger->setMinLevel( LogLevel::ERROR );
 
-        $e->expects($this->once())->method('process');
+        $crit_logger = $this->_getMocklogger(array('process'));
+        $crit_logger->setMinLevel( LogLevel::CRITICAL );
 
-        $c = $this->_getMocklogger(array('process'));
-        $c->setMinLevel( LogLevel::CRITICAL );
+        $this->logger = new Logger( array($err_logger, $crit_logger) );
 
-        $c->expects($this->once())->method('process');
+        $err_logger->expects($this->once())->method('process');
+        $crit_logger->expects($this->once())->method('process');
 
-        $this->logger = new Logger( array($c, $e) );
-
-        $this->logger->error('test');
-        $this->logger->critical('test');
+        $this->logger->error('test err');
+        $this->logger->critical('test crit');
     }
 
     /**
@@ -124,7 +123,7 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
 
     protected function _getFilledInLogBuckets($cascading=true)
     {
-        // the log bucket for everything (starts at 0 Debug level).
+        // The log bucket for everything (starts at 0 Debug level).
         $dev_log = new Logger\Runtime();
         $dev_log->setMinLevel('debug', $cascading);       
 
@@ -198,25 +197,75 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
 
     public function testSetCascading()
     {
+        $logger = new Logger\Runtime();
+        $this->assertTrue(
+            \PHPUnit_Framework_Assert::readAttribute($logger, "cascading"),
+            "The 'cascading' propertie should be True by default"
+        );
+        $logger->setCascading(false);
+        $this->assertFalse(
+            \PHPUnit_Framework_Assert::readAttribute($logger, "cascading")
+        );
+    }
+
+    public function testCascading()
+    {
         $dev_log = new Logger\Runtime();
         $dev_log->setMinLevel('debug');
-        $this->logger->add($dev_log);
-        
-        $app_log = new Logger\Runtime();
+
+        $app_log = new Logger\Runtime();        
         $app_log->setMinLevel('alert');
+        
+        $this->logger->add($dev_log);
         $this->logger->add($app_log);
         
         $buckets = $this->logger->getBuckets();
 
-        $this->logger->alert('test 1');
+        $this->logger->alert('cascading');
         $this->assertCount(1, $buckets[0]->getItems());
         $this->assertCount(1, $buckets[1]->getItems());
 
-        $app_log->setCascading(false);
-        $this->logger->alert('test 2');
+        $app_log->setCascading(false)->alert('not-cascading');
 
-        $this->assertCount(2, $buckets[0]->getItems(), 'app_log should now have 2');
-        $this->assertCount(1, $buckets[1]->getItems(), 'dev_log should still have 1');
+        $this->assertCount(2, $buckets[0]->getItems(), 'app_log count = 2');
+        $this->assertCount(1, $buckets[1]->getItems(), 'dev_log count = 1');
+    }
+
+    public function testSetDeferred()
+    {
+        $logger = new Logger\Runtime();
+        $this->assertFalse(
+            \PHPUnit_Framework_Assert::readAttribute($logger, "deferred"),
+            "The 'deferred' propertie should be False by default"
+        );
+        $logger->setDeferred(true);
+        $this->assertTrue(
+            \PHPUnit_Framework_Assert::readAttribute($logger, "deferred")
+        );
+    }
+
+    public function testDeferring()
+    {
+        $logger = new Logger\Runtime();
+        $logger->alert('not-deferred');
+
+        $this->assertCount(1, $logger->getItems());
+
+        $logger->setDeferred(true)->alert('deferred');
+
+        $this->assertCount(1, $logger->getItems());
+        $this->assertCount(1, $logger->getDeferredLogs());
+    }
+
+    public function testDestructIsNotDeferring()
+    {
+        $logger = new Logger\Runtime();
+        $logger->setDeferred(true)->alert('deferred');
+        $logger->setDeferred(false)->alert('not-deferred');
+
+        $logger->__destruct();
+
+        $this->assertCount(1, $logger->getDeferredLogs());
     }
 
 }

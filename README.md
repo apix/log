@@ -10,17 +10,18 @@ Minimalist **PSR-3** compliant logger.
 
 Feel free to comment, send pull requests and patches...
 
+:new: *Log dispatch can be postponed/accumulated using `setDeferred()`.*
+
 Basic usage (*standalone*)
 -----------
 ```php
 use Apix\Log;
 
-// Bucket for log superior or equal to `critical`
 $urgent_logger = new Logger\Mail('franck@foo.bar');
-$urgent_logger->setMinLevel('critical');    // set the minimal level
+$urgent_logger->setMinLevel('critical');   // catch logs >= to `critical`
 ```
 
-This logger/bucket will intercept `critical`, `alert` and `emergency` logs.
+This logger/bucket will intercept `critical`, `alert` and `emergency` logs (see [Log levels](#Log-levels)).
 
 To log an event, use:
 
@@ -33,20 +34,20 @@ Advanced usage (*multi-logs dispatcher*)
 Okay. Lets create some additional loggers/buckets -- one generic, another one for development.
 
 ```php
-// Bucket for log >= to `notice`
 $app_logger = new Logger\File('/var/log/apix_app.log');
-$app_logger->setMinLevel('notice')
-           ->setCascading(False);    // stop the log here if intercepted
+$app_logger->setMinLevel('notice')  // intercept logs that are >= `notice`,
+           ->setDeferred(True)      // postpone/accumulate logs processing,
+           ->setCascading(False);   // don't propagate to further buckets.
 
-// The main logger object (injecting the buckets)
+// The main logger object (injecting the previous buckets)
 $logger = new Logger( array($urgent_logger, $app_logger) );
 
 if(DEBUG) {
-  // Bucket log just for `info` and `debug`
+  // Bucket for the remaining logs -- i.e. `info` and `debug`
   $debug_logger = new Logger\File('/tmp/apix_develop.log');
-  $debug_logger->setMinLevel('debug');
+  $debug_logger->setMinLevel('debug');  // Note: `debug` is the default!
 
-  $logger->add($debug_logger);    // another way to inject a bucket
+  $logger->add($debug_logger);   // another way to inject a bucket
 }
 ```
 
@@ -76,7 +77,7 @@ error     | Runtime errors, used to log unhandled exceptions
 warning   | May indicate that an error will occur if action is not taken
 notice    | Events that are unusual but not error conditions
 info      | Normal operational messages (no action required)
-debug     | Verbose info useful to developers for debugging purposes
+debug     | Verbose info useful to developers for debugging purposes (default)
 
 [PSR-3]: http://tools.ietf.org/html/rfc5424
 [RFC 5424]: http://tools.ietf.org/html/rfc5424

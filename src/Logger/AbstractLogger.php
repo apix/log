@@ -50,6 +50,18 @@ abstract class AbstractLogger extends AbsPsrLogger
     protected $cascading = true;
 
     /**
+     * Whether this logger will be deferred (push the logs at destruct time).
+     * @var bool
+     */
+    protected $deferred = false;
+
+    /**
+     * Holds the deferred logs.
+     * @var array
+     */
+    protected $deferred_logs = array();
+
+    /**
      * Gets the named level code.
      *
      * @param string                   $name The name of a PSR-3 level.
@@ -104,7 +116,11 @@ abstract class AbstractLogger extends AbsPsrLogger
                         $this->interpolate($log['msg'], $log['ctx'])
                     );
 
-        $this->write($log);
+        if ($this->deferred) {
+            $this->deferred_logs[] = $log;
+        } else {
+            $this->write($log);
+        }
 
         return $this->cascading;
     }
@@ -122,7 +138,6 @@ abstract class AbstractLogger extends AbsPsrLogger
 
     /**
      * Sets the minimal level at which this logger will be triggered.
-     * NOTE: considering wether to rename this to `interceptAt`
      *
      * @param  string $name
      * @param  boolean $cascading Should the logs continue pass that level (default to true)
@@ -189,6 +204,41 @@ abstract class AbstractLogger extends AbsPsrLogger
         }
 
         return strtr($message, $replaces);
+    }
+
+    /**
+     * Sets wether to enable/disable log deferring.
+     *
+     * @param  bool $bool
+     * @return self
+     */
+    public function setDeferred($bool)
+    {
+        $this->deferred = (boolean) $bool;
+
+        return $this;
+    }
+
+    /**
+     * Returns all the deferred logs.
+     *
+     * @return array
+     */
+    public function getDeferredLogs()
+    {
+        return $this->deferred_logs;
+    }
+
+    /**
+     * Process any accumulated deferred log if there are any.
+     */
+    final public function __destruct()
+    {
+        if ($this->deferred && !empty($this->deferred_logs)) {
+            foreach($this->deferred_logs as $log) {
+                $this->write($log);
+            }            
+        }
     }
 
 }
