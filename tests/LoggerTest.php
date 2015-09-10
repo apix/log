@@ -260,4 +260,14 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
         $this->logger = null; // call destruct...
     }
 
+    public function testDestructIsNotDeferring()
+    {
+        $this->logger = new Logger\Runtime();
+        $this->logger->setDeferred(true);
+
+        $this->logger = null; // call destruct...
+
+        $this->assertCount(1, $this->logger->getDeferredLogs());
+    }
+
 }
