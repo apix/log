@@ -65,7 +65,7 @@ abstract class AbstractLogger extends AbsPsrLogger
      * Holds the log separator.
      * @var string
      */
-    public $log_separator = PHP_EOL;
+    protected $log_separator = PHP_EOL;
 
     /**
      * Gets the named level code.
