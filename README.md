@@ -8,6 +8,17 @@ Minimalist **PSR-3** compliant logger.
 * Continuously integrated against **PHP 5.3**, **5.4**, **5.5**, **5.6**, **7.0** and **HHVM**.
 * Available as a **[Composer](https://packagist.org/packages/apix/log)** ~~and as a [PEAR](http://pear.ouarz.net)~~ package.
 
+* Essentially a wrapper to the `error_log()` function, it ships with
+ * [ErrorLog](src/Logger/ErrorLog.php) ~ logs are sent to PHP's system logger,
+ * [Mail](src/Logger/Mail.php) ~ logs are sent by email(s),
+ * [File](src/Logger/File.php) ~ logs are appended to the file destination,
+ * [Sapi](src/Logger/Sapi.php) ~ logs are sent directly to the SAPI,
+ * [Runtime](src/Logger/Runtime.php) as an Array/ArrayObject wrapper,
+ * and [Nil](src/Logger/Nil.php) as Null log wrapper.
+* More logging backends are also available:
+ * [PHPMailer/apix-log-phpmailer](https://github.com/PHPMailer/apix-log-phpmailer) ~ logs are sent using PHPMailer.
+ * Additional backends will be linked here -- to contribute see the [`LoggerInterface`](src/Logger/LoggerInterface.php).
+
 Feel free to comment, send pull requests and patches...
 
 :new: *Log dispatch can be postponed/accumulated using `setDeferred()`.*
