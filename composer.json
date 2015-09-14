@@ -22,10 +22,10 @@
         "phpunit/phpunit": "4.8.*"
     },
     "autoload": {
-        "psr-4": {
-            "Apix\\Log\\": "src/",
-            "Apix\\Log\\tests\\": "tests/"
-        }
+        "psr-4": { "Apix\\Log\\": "src/" }
+    },
+    "autoload-dev": {
+        "psr-4": { "Apix\\Log\\tests\\": "tests/" }
     },
     "provide": {
         "psr/log-implementation": "1.0.0"
