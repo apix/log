@@ -7,7 +7,6 @@ Minimalist **PSR-3** compliant logger.
 * Unit **tested** and compliant with PSR0, PSR1 and PSR2.
 * Continuously integrated against **PHP 5.3**, **5.4**, **5.5**, **5.6**, **7.0** and **HHVM**.
 * Available as a **[Composer](https://packagist.org/packages/apix/log)** ~~and as a [PEAR](http://pear.ouarz.net)~~ package.
-
 * Essentially a wrapper to the `error_log()` function, it ships with
  * [ErrorLog](src/Logger/ErrorLog.php) ~ logs are sent to PHP's system logger,
  * [Mail](src/Logger/Mail.php) ~ logs are sent by email(s),
