@@ -15,7 +15,7 @@ namespace Apix\Log;
  *
  * @author Franck Cassedanne <franck at ouarz.net>
  */
-class LogFormatter
+class LogFormatter implements LogFormatterInterface
 {
 
     /**
@@ -26,8 +26,9 @@ class LogFormatter
 
     /**
      * Interpolates context values into the message placeholders.
+     *
      * Builds a replacement array with braces around the context keys.
-     * It replaces {foo} with the value from $context['foo']
+     * It replaces {foo} with the value from $context['foo'].
      *
      * @param  string $message
      * @param  array  $context
