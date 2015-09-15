@@ -1,13 +1,11 @@
 <?php
 
 /**
- *
  * This file is part of the Apix Project.
  *
  * (c) Franck Cassedanne <franck at ouarz.net>
  *
- * @license     http://opensource.org/licenses/BSD-3-Clause  New BSD License
- *
+ * @license http://opensource.org/licenses/BSD-3-Clause  New BSD License
  */
 
 namespace Apix\Log\tests\Logger;
@@ -28,7 +26,8 @@ abstract class TestCase extends LoggerInterfaceTest
                         isset($match[2]) ? $match[2] : null
                     );
                 },
-                $log);
+                $log
+            );
         };
 
         return array_map($normalize, $logs);
@@ -120,7 +119,7 @@ abstract class TestCase extends LoggerInterfaceTest
 
     public function testContextIsAnException()
     {
-        $this->getLogger()->critical( new \Exception('Boo!') );
+        $this->getLogger()->critical(new \Exception('Boo!'));
         
         $logs = $this->getLogs();
         

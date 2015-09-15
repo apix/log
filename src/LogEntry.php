@@ -1,13 +1,11 @@
 <?php
 
 /**
- *
  * This file is part of the Apix Project.
  *
  * (c) Franck Cassedanne <franck at ouarz.net>
  *
- * @license     http://opensource.org/licenses/BSD-3-Clause  New BSD License
- *
+ * @license http://opensource.org/licenses/BSD-3-Clause  New BSD License
  */
 
 namespace Apix\Log;
@@ -61,9 +59,9 @@ class LogEntry
     /**
      * Constructor.
      *
-     * @param  string   $name The level name.
-     * @param  string   $message The message for this log entry.
-     * @param  array    $context The contexts for this log entry.
+     * @param string $name    The level name.
+     * @param string $message The message for this log entry.
+     * @param array  $context The contexts for this log entry.
      */
     public function __construct($name, $message, array $context = array())
     {

@@ -1,13 +1,11 @@
 <?php
 
 /**
- *
  * This file is part of the Apix Project.
  *
  * (c) Franck Cassedanne <franck at ouarz.net>
  *
- * @license     http://opensource.org/licenses/BSD-3-Clause  New BSD License
- *
+ * @license http://opensource.org/licenses/BSD-3-Clause  New BSD License
  */
 
 namespace Apix\Log;
@@ -40,18 +38,18 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
      */
     public function testConstructorThrowsInvalidArgumentException()
     {
-        new Logger( array( new \StdClass() ) );
+        new Logger(array( new \StdClass() ));
     }
 
     public function testConstructor()
     {
         $err_logger = $this->_getMocklogger(array('process'));
-        $err_logger->setMinLevel( LogLevel::ERROR );
+        $err_logger->setMinLevel(LogLevel::ERROR);
 
         $crit_logger = $this->_getMocklogger(array('process'));
-        $crit_logger->setMinLevel( LogLevel::CRITICAL );
+        $crit_logger->setMinLevel(LogLevel::CRITICAL);
 
-        $this->logger = new Logger( array($err_logger, $crit_logger) );
+        $this->logger = new Logger(array($err_logger, $crit_logger));
 
         $err_logger->expects($this->once())->method('process');
         $crit_logger->expects($this->once())->method('process');
@@ -90,7 +88,7 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
     {
         $mock_logger = $this->_getMocklogger(array('write'));
         $mock_logger->expects($this->once())
-                ->method('write');
+            ->method('write');
 
         $this->logger->add($mock_logger);
 
@@ -101,10 +99,10 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
     {
         $mock_logger = $this->_getMocklogger(array('process'));
         $mock_logger->expects($this->once()) // <-- process IS expected
-                ->method('process');
+            ->method('process');
 
         $this->logger->add($mock_logger);
-        $mock_logger->setMinLevel( LogLevel::WARNING );
+        $mock_logger->setMinLevel(LogLevel::WARNING);
 
         $this->logger->warning('test');
     }
@@ -112,10 +110,10 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
     public function testLogWillNotProcess()
     {
         $mock_logger = $this->_getMocklogger(array('process'));
-        $mock_logger->setMinLevel( LogLevel::ERROR );
+        $mock_logger->setMinLevel(LogLevel::ERROR);
 
         $mock_logger->expects($this->never()) // <-- process IS NOT expected
-                ->method('process');
+            ->method('process');
         $this->logger->add($mock_logger);
 
         $this->logger->warning('test');

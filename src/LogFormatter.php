@@ -1,13 +1,11 @@
 <?php
 
 /**
- *
  * This file is part of the Apix Project.
  *
  * (c) Franck Cassedanne <franck at ouarz.net>
  *
- * @license     http://opensource.org/licenses/BSD-3-Clause  New BSD License
- *
+ * @license http://opensource.org/licenses/BSD-3-Clause  New BSD License
  */
 
 namespace Apix\Log;
@@ -31,8 +29,8 @@ class LogFormatter
      * Builds a replacement array with braces around the context keys.
      * It replaces {foo} with the value from $context['foo']
      *
-     * @param string $message
-     * @param array  $context
+     * @param  string $message
+     * @param  array  $context
      * @return string
      */
     public function interpolate($message, array $context = array())
@@ -41,8 +39,7 @@ class LogFormatter
         foreach ($context as $key => $val) {
             if (is_bool($val)) {
                 $val = '[bool: ' . (int) $val . ']';
-            } elseif (
-                is_null($val)
+            } elseif (is_null($val)
                 || is_scalar($val)
                 || ( is_object($val) && method_exists($val, '__toString') )
             ) {
@@ -61,7 +58,7 @@ class LogFormatter
     /**
      * Format the given log entry.
      *
-     * @param  LogEntry   $log The log entry to format.
+     * @param  LogEntry $log The log entry to format.
      * @return string
      */
     public function format(LogEntry $log)

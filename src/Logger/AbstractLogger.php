@@ -1,13 +1,11 @@
 <?php
 
 /**
- *
  * This file is part of the Apix Project.
  *
  * (c) Franck Cassedanne <franck at ouarz.net>
  *
- * @license     http://opensource.org/licenses/BSD-3-Clause  New BSD License
- *
+ * @license http://opensource.org/licenses/BSD-3-Clause  New BSD License
  */
 
 namespace Apix\Log\Logger;
@@ -41,7 +39,7 @@ abstract class AbstractLogger extends PsrAbstractLogger
 
     /**
      * Holds the minimal level index supported by this logger.
-     * @var integer
+     * @var int
      */
     protected $min_level = 0;
 
@@ -72,7 +70,7 @@ abstract class AbstractLogger extends PsrAbstractLogger
     /**
      * Gets the named level code.
      *
-     * @param string $level_name The name of a PSR-3 level.
+     * @param  string $level_name The name of a PSR-3 level.
      * @return int
      * @throws InvalidArgumentException
      */
@@ -89,7 +87,7 @@ abstract class AbstractLogger extends PsrAbstractLogger
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function log($level, $message, array $context = array())
     {
@@ -101,9 +99,8 @@ abstract class AbstractLogger extends PsrAbstractLogger
     /**
      * Processes the given log.
      *
-     * @param  array   $log The record to handle
-     * @return boolean true means that this handler handled the record, and that bubbling is not permitted.
-     *                     false means the record was either not processed or that this handler allows bubbling.
+     * @param  LogEntry $log The log entry to process.
+     * @return bool Wether this logger cascade downstream.
      */
     public function process(LogEntry $log)
     {
@@ -117,10 +114,10 @@ abstract class AbstractLogger extends PsrAbstractLogger
     }
 
     /**
-     * Checks whether the given level code is handled by this handler.
+     * Checks whether the given level code is handled by this logger.
      *
-     * @param  integer $level_code
-     * @return boolean
+     * @param  int $level_code
+     * @return bool
      */
     public function isHandling($level_code)
     {
@@ -131,10 +128,10 @@ abstract class AbstractLogger extends PsrAbstractLogger
      * Sets the minimal level at which this logger will be triggered.
      *
      * @param  string $name
-     * @param  boolean $cascading Should the logs continue pass that level (default to true)
+     * @param  bool   $cascading|true Should the logs continue pass that level.
      * @return self
      */
-    public function setMinLevel($name, $cascading=true)
+    public function setMinLevel($name, $cascading = true)
     {
         $this->min_level = self::getLevelCode(strtolower($name));
         $this->cascading = (boolean) $cascading;
@@ -145,7 +142,7 @@ abstract class AbstractLogger extends PsrAbstractLogger
     /**
      * Returns the minimal level at which this logger will be triggered.
      *
-     * @return integer
+     * @return int
      */
     public function getMinLevel()
     {
@@ -194,9 +191,10 @@ abstract class AbstractLogger extends PsrAbstractLogger
     final public function __destruct()
     {
         if ($this->deferred && !empty($this->deferred_logs)) {
-            
             $messages = array_map(
-                function($log) { return $log->message; },
+                function ($log) {
+                    return $log->message;
+                },
                 $this->deferred_logs
             );
 
@@ -210,7 +208,7 @@ abstract class AbstractLogger extends PsrAbstractLogger
     /**
      * Sets a log formatter.
      *
-     * @param LogFormatter  $formatter
+     * @param LogFormatter $formatter
      */
     public function setLogFormatter(LogFormatter $formatter)
     {
@@ -224,7 +222,6 @@ abstract class AbstractLogger extends PsrAbstractLogger
      */
     public function getLogFormatter()
     {
-        return $this->log_formatter ?: new LogFormatter;
+        return $this->log_formatter ?: new LogFormatter();
     }
-
 }

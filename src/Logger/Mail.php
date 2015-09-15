@@ -1,13 +1,11 @@
 <?php
 
 /**
- *
  * This file is part of the Apix Project.
  *
  * (c) Franck Cassedanne <franck at ouarz.net>
  *
- * @license     http://opensource.org/licenses/BSD-3-Clause  New BSD License
- *
+ * @license http://opensource.org/licenses/BSD-3-Clause  New BSD License
  */
 
 namespace Apix\Log\Logger;
@@ -25,8 +23,8 @@ class Mail extends ErrorLog
     /**
      * Constructor.
      *
-     * @param  string                           $email   The email to append to.
-     * @param  string|null                      $headers A string of additional (mail) headers.
+     * @param  string      $email   The email to append to.
+     * @param  string|null $headers A string of additional (mail) headers.
      * @throws Psr\Log\InvalidArgumentException If the email does not validate.
      */
     public function __construct($email, $headers = null)
