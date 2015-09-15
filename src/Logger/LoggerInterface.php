@@ -16,8 +16,8 @@ use Apix\Log\LogEntry;
  * Logger Interface providing PSR-3 (PSR Log) compliency.
  *
  * To contribute a logger, essentially it needs to:
- *    1.) Extends the `LoggerAbstractLogger`,
- *    2.) Implements this interface `LoggerInterface`,
+ *    1.) Extends the `LoggerAbstractLogger`
+ *    2.) Implements this interface `LoggerInterface`
  *    3.) Cast to string the provided `LogEntry $log` e.g. (string) $log
  *
  * @example 
@@ -28,6 +28,8 @@ use Apix\Log\LogEntry;
  *         echo $log;
  *     }
  *   }
+ *
+ * @see tests/LogFormatterTest.php     For a more detailed example.
  *
  * @author Franck Cassedanne <franck at ouarz.net>
  */
