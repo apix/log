@@ -56,7 +56,7 @@ class LogFormatter
     }
 
     /**
-     * Format the given log entry.
+     * Formats the given log entry.
      *
      * @param  LogEntry $log The log entry to format.
      * @return string

@@ -13,7 +13,7 @@ namespace Apix\Log\Logger;
 use Psr\Log\InvalidArgumentException;
 
 /**
- * Mail log wrapper.
+ * Minimalist mail based PSR-3 logger relying on PHP's error_log().
  *
  * @author Franck Cassedanne <franck at ouarz.net>
  */

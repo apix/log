@@ -13,7 +13,7 @@ namespace Apix\Log\Logger;
 use Psr\Log\InvalidArgumentException;
 
 /**
- * Minimalist file based logger implementing PSR-3 relying on PHP's error_log().
+ * Minimalist file based PSR-3 logger relying on PHP's error_log().
  *
  * @author Franck Cassedanne <franck at ouarz.net>
  */
