@@ -13,7 +13,21 @@ namespace Apix\Log\Logger;
 use Apix\Log\LogEntry;
 
 /**
- * Logger Interface.
+ * Logger Interface providing PSR-3 (PSR Log) compliency.
+ *
+ * To contribute a logger, essentially it needs to:
+ *    1.) Extends the `LoggerAbstractLogger`,
+ *    2.) Implements this interface `LoggerInterface`,
+ *    3.) Cast to string the provided `LogEntry $log` e.g. (string) $log
+ *
+ * @example 
+ *   class StandardOutput extends AbstractLogger implements LoggerInterface
+ *   {
+ *     public function write(LogEntry $log)
+ *     {
+ *         echo $log;
+ *     }
+ *   }
  *
  * @author Franck Cassedanne <franck at ouarz.net>
  */
@@ -21,7 +35,7 @@ interface LoggerInterface
 {
 
     /**
-     * Write the log.
+     * Write the given log entry.
      *
      * @param  LogEntry $log
      * @return bool
