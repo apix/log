@@ -44,13 +44,13 @@ class RuntimeTest extends TestCase
     public function testAbstractLogger()
     {
         $context = array('foo', 'bar');
-        $this->logger->debug('msg', $context);
-        $this->logger->error('msg', $context);
+        $this->logger->debug('msg1', $context);
+        $this->logger->error('msg2', $context);
 
         $logs = $this->logger->getItems();
 
         $this->assertSame(2, count($logs));
-        $this->assertSame(array('debug msg', 'error msg'), $this->_normalizeLogs($logs));
+        $this->assertSame(array('debug msg1', 'error msg2'), $this->_normalizeLogs($logs));
     }
 
 }
