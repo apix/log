@@ -18,7 +18,7 @@ namespace Apix\Log\Logger;
  * @author Franck Cassedanne <franck at ouarz.net>
  * @codeCoverageIgnore
  */
-class Sapi extends ErrorLog implements LoggerInterface
+class Sapi extends ErrorLog
 {
 
     /**

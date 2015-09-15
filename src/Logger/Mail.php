@@ -19,7 +19,7 @@ use Psr\Log\InvalidArgumentException;
  *
  * @author Franck Cassedanne <franck at ouarz.net>
  */
-class Mail extends ErrorLog implements LoggerInterface
+class Mail extends ErrorLog
 {
 
     /**

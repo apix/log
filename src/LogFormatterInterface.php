@@ -10,24 +10,22 @@
  *
  */
 
-namespace Apix\Log\Logger;
-
-use Apix\Log\LogEntry;
+namespace Apix\Log;
 
 /**
- * Logger Interface.
+ * Log Entry Formatter Interface.
  *
  * @author Franck Cassedanne <franck at ouarz.net>
  */
-interface LoggerInterface
+interface LogFormatterInterface
 {
 
     /**
-     * Write the log.
+     * Format the given log entry.
      *
-     * @param  LogEntry $log
-     * @return bool
+     * @param  LogEntry   $log The log entry to format.
+     * @return string
      */
-    public function write(LogEntry $log);
+    static public function format(LogEntry $log);
 
 }

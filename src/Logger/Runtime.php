@@ -12,6 +12,8 @@
 
 namespace Apix\Log\Logger;
 
+use Apix\Log\LogEntry;
+
 /**
  * Runtime (Array/ArrayObject) log wrapper.
  *
@@ -28,9 +30,9 @@ class Runtime extends AbstractLogger implements LoggerInterface
     /**
      * {@inheritDoc}
      */
-    public function write(array $log)
+    public function write(LogEntry $log)
     {
-        $this->items[] = $log['msg'];
+        $this->items[] = (string) $log;
     }
 
     /**

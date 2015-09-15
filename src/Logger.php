@@ -14,7 +14,6 @@ namespace Apix\Log;
 
 use Apix\Log\Logger\AbstractLogger;
 use Psr\Log\InvalidArgumentException;
-use Psr\Log\LogLevel;
 
 /**
  * Minimalist logger implementing PSR-3 relying on PHP's error_log().
@@ -23,9 +22,9 @@ use Psr\Log\LogLevel;
  */
 class Logger extends AbstractLogger
 {
-
     /**
      * Holds all the registered loggers as buckets.
+     *
      * @var Logger\LoggerInterface[].
      */
     protected $buckets = array();
@@ -45,7 +44,7 @@ class Logger extends AbstractLogger
                     sprintf(
                         '"%s" must interface "%s".',
                         get_class($logger),
-                        __NAMESPACE__ . '\Logger\LoggerInterface'
+                        __NAMESPACE__.'\Logger\LoggerInterface'
                     )
                 );
             }
@@ -55,20 +54,21 @@ class Logger extends AbstractLogger
 
     /**
      * Processes the given log.
-     * (overwrite abstract)
+     * (overwrite abstract).
      *
-     * @param  array   $log The record to handle
-     * @return boolean False when not processed.
+     * @param LogEntry $log The log record to handle.
+     *
+     * @return bool False when not processed.
      */
-    public function process(array $log)
+    public function process(LogEntry $log)
     {
-        $i = $this->getIndexFirstBucket( $log['code'] );
+        $i = $this->getIndexFirstBucket($log->level_code);
         if (false !== $i) {
             while (
                 isset($this->buckets[$i])
-                && $this->buckets[$i]->process( $log )
+                && $this->buckets[$i]->process($log)
             ) {
-                $i++;
+                ++$i;
             }
 
             return true;
@@ -80,13 +80,14 @@ class Logger extends AbstractLogger
     /**
      * Checks if any log bucket can hanle the given code.
      *
-     * @param  integer       $code
-     * @return integer|false
+     * @param int $level_code
+     *
+     * @return int|false
      */
-    protected function getIndexFirstBucket($code)
+    protected function getIndexFirstBucket($level_code)
     {
         foreach ($this->buckets as $key => $logger) {
-            if ( $logger->isHandling( $code ) ) {
+            if ($logger->isHandling($level_code)) {
                 return $key;
             }
         }
@@ -97,32 +98,35 @@ class Logger extends AbstractLogger
     /**
      * Gets the name of the PSR-3 logging level.
      *
-     * @param  string                   $level
+     * @param string $level_name
+     *
      * @return string
+     *
      * @throws InvalidArgumentException
      */
-    public static function getPsrLevelName($level)
+    public static function getPsrLevelName($level_name)
     {
-        $logLevel = '\Psr\Log\LogLevel::' . strtoupper($level);
-        if ( !defined($logLevel) ) {
+        $logLevel = '\Psr\Log\LogLevel::'.strtoupper($level_name);
+        if (!defined($logLevel)) {
             throw new InvalidArgumentException(
-                sprintf('Invalid PSR-3 log level "%s"', $level)
+                sprintf('Invalid PSR-3 log level "%s"', $level_name)
             );
         }
 
-        return $level;
+        return $level_name;
     }
 
     /**
      * Adds a logger.
      *
      * @param Logger\LoggerInterface $logger
-     * @return boolean Returns TRUE on success or FALSE on failure.
+     *
+     * @return bool Returns TRUE on success or FALSE on failure.
      */
     public function add(Logger\LoggerInterface $logger)
     {
         $this->buckets[] = $logger;
-        
+
         return $this->sortBuckets();
     }
 
@@ -130,13 +134,15 @@ class Logger extends AbstractLogger
      * Sorts the log buckets, prioritizes top-down by minimal level.
      * Beware: Exisiting level will be in FIFO order.
      * 
-     * @return boolean Returns TRUE on success or FALSE on failure.
+     * @return bool Returns TRUE on success or FALSE on failure.
      */
     protected function sortBuckets()
     {
-        return usort($this->buckets, function($a, $b) {
-            return $a->getMinLevel() < $b->getMinLevel();
-        });
+        return usort(
+            $this->buckets, function ($a, $b) {
+                return $a->getMinLevel() < $b->getMinLevel();
+            }
+        );
     }
 
     /**
@@ -148,5 +154,4 @@ class Logger extends AbstractLogger
     {
         return $this->buckets;
     }
-
 }

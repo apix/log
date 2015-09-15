@@ -12,6 +12,8 @@
 
 namespace Apix\Log\Logger;
 
+use Apix\Log\LogEntry;
+
 /**
  * Nil (Null) log wrapper.
  *
@@ -24,7 +26,7 @@ class Nil extends AbstractLogger implements LoggerInterface
     /**
      * {@inheritDoc}
      */
-    public function write(array $log)
+    public function write(LogEntry $log)
     {
         return false;
     }

@@ -19,7 +19,7 @@ use Psr\Log\InvalidArgumentException;
  *
  * @author Franck Cassedanne <franck at ouarz.net>
  */
-class File extends ErrorLog implements LoggerInterface
+class File extends ErrorLog
 {
 
     /**

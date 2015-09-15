@@ -12,6 +12,8 @@
 
 namespace Apix\Log\Logger;
 
+use Apix\Log\LogEntry;
+
 /**
  * Minimalist logger implementing PSR-3 relying on PHP's error_log().
  *
@@ -61,13 +63,20 @@ class ErrorLog extends AbstractLogger implements LoggerInterface
     /**
      * {@inheritDoc}
      */
-    public function write(array $log)
+    public function write(LogEntry $log)
     {
-        $msg = !$this->deferred && $this->type == self::FILE
-                ? $log['msg'] . $this->log_separator
-                : $log['msg'];
+        $message = (string) $log;
 
-        return error_log($msg, $this->type, $this->destination, $this->headers);
+        if(!$this->deferred && $this->type == self::FILE) {
+            $message .= $log->formatter->separator;
+        }
+
+        return error_log(
+            $message,
+            $this->type,
+            $this->destination,
+            $this->headers
+        );
     }
 
 }

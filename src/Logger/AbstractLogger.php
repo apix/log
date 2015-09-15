@@ -12,21 +12,23 @@
 
 namespace Apix\Log\Logger;
 
-use Psr\Log\AbstractLogger as AbsPsrLogger;
+use Psr\Log\AbstractLogger as PsrAbstractLogger;
 use Psr\Log\InvalidArgumentException;
+use Apix\Log\LogEntry;
+use Apix\Log\LogFormatter;
 
 /**
  * Abstratc class.
  *
  * @author Franck Cassedanne <franck at ouarz.net>
  */
-abstract class AbstractLogger extends AbsPsrLogger
+abstract class AbstractLogger extends PsrAbstractLogger
 {
     /**
      * The PSR-3 logging levels.
      * @var array
      */
-    static protected $levels = array(
+    protected static $levels = array(
         'debug',
         'info',
         'notice',
@@ -62,28 +64,28 @@ abstract class AbstractLogger extends AbsPsrLogger
     protected $deferred_logs = array();
 
     /**
-     * Holds the log separator.
-     * @var string
+     * Holds the log formatter.
+     * @var LogFormatter|null
      */
-    protected $log_separator = PHP_EOL;
+    protected $log_formatter = null;
 
     /**
      * Gets the named level code.
      *
-     * @param string                   $name The name of a PSR-3 level.
-     * @return integer
+     * @param string $level_name The name of a PSR-3 level.
+     * @return int
      * @throws InvalidArgumentException
      */
-    public static function getLevelCode($name)
+    public static function getLevelCode($level_name)
     {
-        $code = array_search($name, static::$levels);
-        if (false === $code) {
+        $level_code = array_search($level_name, static::$levels);
+        if (false === $level_code) {
             throw new InvalidArgumentException(
-                sprintf('Invalid log level "%s"', $name)
+                sprintf('Invalid log level "%s"', $level_name)
             );
         }
 
-        return $code;
+        return $level_code;
     }
 
     /**
@@ -91,21 +93,9 @@ abstract class AbstractLogger extends AbsPsrLogger
      */
     public function log($level, $message, array $context = array())
     {
-        // Message is not a string let assume it is a context -- and permute. 
-        if (!is_string($message)) {
-            $context = array( 'ctx' => $message );
-            $message = '{ctx}';
-        }
-
-        $log = array(
-            'name' => $level,
-            'code' => static::getLevelCode($level),
-            'msg'  => $message,
-            'ctx'  => $context,
-            'time' => time()
-        );
-
-        $this->process($log);
+        $entry = new LogEntry($level, $message, $context);
+        $entry->setFormatter($this->getLogFormatter());
+        $this->process($entry);
     }
 
     /**
@@ -115,14 +105,8 @@ abstract class AbstractLogger extends AbsPsrLogger
      * @return boolean true means that this handler handled the record, and that bubbling is not permitted.
      *                     false means the record was either not processed or that this handler allows bubbling.
      */
-    public function process(array $log)
+    public function process(LogEntry $log)
     {
-        $log['msg'] = sprintf('[%s] %s %s',
-                        date('Y-m-d H:i:s', $log['time']),
-                        strtoupper($log['name']),
-                        $this->interpolate($log['msg'], $log['ctx'])
-                    );
-
         if ($this->deferred) {
             $this->deferred_logs[] = $log;
         } else {
@@ -152,7 +136,7 @@ abstract class AbstractLogger extends AbsPsrLogger
      */
     public function setMinLevel($name, $cascading=true)
     {
-        $this->min_level = (int) static::getLevelCode(strtolower($name));
+        $this->min_level = self::getLevelCode(strtolower($name));
         $this->cascading = (boolean) $cascading;
 
         return $this;
@@ -179,38 +163,6 @@ abstract class AbstractLogger extends AbsPsrLogger
         $this->cascading = (boolean) $bool;
 
         return $this;
-    }
-
-    /**
-     * Interpolates context values into the message placeholders.
-     * Builds a replacement array with braces around the context keys.
-     * It replaces {foo} with the value from $context['foo']
-     *
-     * @param string $message
-     * @param array  $context
-     * @return string
-     */
-    public static function interpolate($message, array $context = array())
-    {        
-        $replaces = array();
-        foreach ($context as $key => $val) {
-            if (is_bool($val)) {
-                $val = '[bool: ' . (int) $val . ']';
-            } elseif (
-                is_null($val)
-                || is_scalar($val)
-                || ( is_object($val) && method_exists($val, '__toString') )
-            ) {
-                $val = (string) $val;
-            } elseif (is_array($val) || is_object($val)) {
-                $val = @json_encode($val);
-            } else {
-                $val = '[type: ' . gettype($val) . ']';
-            }
-            $replaces['{' . $key . '}'] = $val;
-        }
-
-        return strtr($message, $replaces);
     }
 
     /**
@@ -243,15 +195,36 @@ abstract class AbstractLogger extends AbsPsrLogger
     {
         if ($this->deferred && !empty($this->deferred_logs)) {
             
-            $msgs = array_map(
-                function($e) { return $e['msg']; },
+            $messages = array_map(
+                function($log) { return $log->message; },
                 $this->deferred_logs
             );
 
-            $this->write(array(
-                'msg' => join($this->log_separator, $msgs)
-            ));
+            $entries = new LogEntry('notice', $messages);
+            $entries->setFormatter($this->getLogFormatter());
+
+            $this->write($entries);
         }
+    }
+
+    /**
+     * Sets a log formatter.
+     *
+     * @param LogFormatter  $formatter
+     */
+    public function setLogFormatter(LogFormatter $formatter)
+    {
+        return $this->log_formatter = $formatter;
+    }
+
+    /**
+     * Returns the current log formatter.
+     *
+     * @return LogFormatter
+     */
+    public function getLogFormatter()
+    {
+        return $this->log_formatter ?: new LogFormatter;
     }
 
 }
