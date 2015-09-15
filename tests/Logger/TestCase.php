@@ -45,17 +45,7 @@ abstract class TestCase extends LoggerInterfaceTest
         return $this->_normalizeLogs(file($this->dest, FILE_IGNORE_NEW_LINES));
     }
 
-    /**
-     * @dataProvider providerMsgContextes
-     */
-    public function testMessageWithContext($msg, $context, $exp)
-    {
-        $this->getLogger()->alert('{'.$msg.'}', array( $msg => $context));
-
-        $this->assertEquals(array('alert ' . $exp), $this->getLogs());
-    }
-
-    public function providerMsgContextes()
+    public function providerMessagesAndContextes()
     {
         $obj = new \stdClass();
         $obj->baz = 'biz';
@@ -85,36 +75,23 @@ abstract class TestCase extends LoggerInterfaceTest
     }
 
     /**
-     * @dataProvider providerContextesOnly
+     * @dataProvider providerMessagesAndContextes
      */
-    public function testContextOnly($key, $context, $exp)
+    public function testMessageWithContext($msg, $context, $exp)
     {
-        $this->getLogger()->debug($context);
+        $this->getLogger()->alert('{'.$msg.'}', array( $msg => $context));
 
-        $this->assertEquals(array('debug ' . $exp), $this->getLogs());
+        $this->assertEquals(array('alert ' . $exp), $this->getLogs());
     }
 
-    public function providerContextesOnly()
+    /**
+     * @dataProvider providerMessagesAndContextes
+     */
+    public function testContextIsPermutted($msg, $context, $exp)
     {
-        $obj = new \stdClass();
-        $obj->baz = 'biz';
-        $obj->nested = new \stdClass();
-        $obj->nested->buz ='bez';
+        $this->getLogger()->notice($context);
 
-        return array(
-            array('null', null, ''),
-
-            // objects
-            array('obj__toString', new DummyTest(), '__toString!'),
-            array('obj_stdClass', new \stdClass(), '{}'),
-            array('obj_instance', $obj, '{"baz":"biz","nested":{"buz":"bez"}}'),
-            
-            // nested arrays...
-            array('nested_values', array('foo','bar'), '["foo","bar"]'),
-            array('nested_asso', array('foo'=>1,'bar'=>'2'), '{"foo":1,"bar":"2"}'),
-            array('nested_object', array(new DummyTest), '[{"foo":"bar"}]'),
-            array('nested_unicode', array('ƃol-xᴉdɐ'), '["\u0183ol-x\u1d09d\u0250"]')
-        );
+        $this->assertEquals(array('notice ' . $exp), $this->getLogs());
     }
 
     public function testContextIsAnException()
