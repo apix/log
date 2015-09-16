@@ -2,21 +2,22 @@ APIx Log, very thin PSR-3 logger
 ================================
 [![Latest Stable Version](https://poser.pugx.org/apix/log/v/stable.svg)](https://packagist.org/packages/apix/log)  [![Build Status](https://travis-ci.org/frqnck/apix-log.png?branch=master)](https://travis-ci.org/frqnck/apix-log)  [![Code Quality](https://scrutinizer-ci.com/g/frqnck/apix-log/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/frqnck/apix-log/?branch=master)  [![Code Coverage](https://scrutinizer-ci.com/g/frqnck/apix-log/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/frqnck/apix-log/?branch=master)  [![License](https://poser.pugx.org/apix/log/license.svg)](https://packagist.org/packages/apix/log)
 
-Minimalist **PSR-3** compliant logger.
+Minimalist, light and fast **PSR-3** compliant logger.
 
-* Unit **tested** and compliant with PSR0, PSR1 and PSR2.
+* Light, bundles with a wrapper to the `error_log()` function, providing:
+ * [**ErrorLog**](src/Logger/ErrorLog.php) ~ logs are sent to PHP's system logger,
+ * [**Mail**](src/Logger/Mail.php) ~ logs are sent by email(s),
+ * [**File**](src/Logger/File.php) ~ logs are appended to a file,
+ * [**Sapi**](src/Logger/Sapi.php) ~ logs are sent directly to the SAPI,
+ * [**Runtime**](src/Logger/Runtime.php) as an Array/ArrayObject wrapper,
+ * and [**Nil**](src/Logger/Nil.php) as Null log wrapper.
+* Extendable, additional logging backends are available:
+ * [**PHPMailer/apix-log-phpmailer**](https://github.com/PHPMailer/apix-log-phpmailer) ~ logs are sent using PHPMailer.
+ * Contributions will be linked here...
+* Easy peasy API, see the [`LoggerInterface`](src/Logger/LoggerInterface.php) and the [`LogFormatterInterface`](src/LogFormatterInterface.php).
+* 100% Unit **tested** and compliant with PSR0, PSR1 and PSR2.
 * Continuously integrated against **PHP 5.3**, **5.4**, **5.5**, **5.6**, **7.0** and **HHVM**.
 * Available as a **[Composer](https://packagist.org/packages/apix/log)** ~~and as a [PEAR](http://pear.ouarz.net)~~ package.
-* Essentially a wrapper to the `error_log()` function, it ships with
- * [ErrorLog](src/Logger/ErrorLog.php) ~ logs are sent to PHP's system logger,
- * [Mail](src/Logger/Mail.php) ~ logs are sent by email(s),
- * [File](src/Logger/File.php) ~ logs are appended to the file destination,
- * [Sapi](src/Logger/Sapi.php) ~ logs are sent directly to the SAPI,
- * [Runtime](src/Logger/Runtime.php) as an Array/ArrayObject wrapper,
- * and [Nil](src/Logger/Nil.php) as Null log wrapper.
-* More logging backends are also available:
- * [PHPMailer/apix-log-phpmailer](https://github.com/PHPMailer/apix-log-phpmailer) ~ logs are sent using PHPMailer.
- * Additional backends will be linked here -- to contribute see the [`LoggerInterface`](src/Logger/LoggerInterface.php).
 
 Feel free to comment, send pull requests and patches...
 
