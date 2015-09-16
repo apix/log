@@ -87,14 +87,14 @@ The eight [RFC 5424][] levels of logs are supported, in cascading order:
 
  Severity  | Description
 -----------|-----------------------------------------------------------------
- Debug     | Verbose info useful to developers for debugging purposes (default)
- Info      | Normal operational messages (no action required)
- Notice    | Events that are unusual but not error conditions
- Warning   | May indicate that an error will occur if action is not taken
- Error     | Runtime errors, used to log unhandled exceptions
- Critical  | Serious failure at the application level
- Alert     | Failure that requires immediate attention
  Emergency | System level failure (not application level)
+ Alert     | Failure that requires immediate attention
+ Critical  | Serious failure at the application level 
+ Error     | Runtime errors, used to log unhandled exceptions
+ Warning   | May indicate that an error will occur if action is not taken
+ Notice    | Events that are unusual but not error conditions
+ Info      | Normal operational messages (no action required)
+ Debug     | Verbose info useful to developers for debugging purposes (default)
 
 [PSR-3]: http://tools.ietf.org/html/rfc5424
 [RFC 5424]: http://tools.ietf.org/html/rfc5424#section-6.2.1
