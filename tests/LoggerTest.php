@@ -26,10 +26,13 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
         unset($this->logger);
     }
 
-    public function testGetLevelCode()
+    /**
+     * @see http://tools.ietf.org/html/rfc5424#section-6.2.1
+     */
+    public function testGetLevelCodeSameOrderAsRfc5424()
     {
-        $this->assertSame(4, Logger::getLevelCode(LogLevel::ERROR));
-        $this->assertSame(4, Logger::getLevelCode('error'));
+        $this->assertSame(3, Logger::getLevelCode(LogLevel::ERROR));
+        $this->assertSame(3, Logger::getLevelCode('error'));
     }
 
     /**
@@ -152,15 +155,18 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
         return $this->logger->getBuckets();
     }
 
-    public function testAddLoggersAreAlwaysSortedbyMinimalLevel()
+    /**
+     * @see http://tools.ietf.org/html/rfc5424#section-6.2.1
+     */
+    public function testAddLoggersAreAlwaysSortedbyLevel()
     {
         $buckets = $this->_getFilledInLogBuckets();
 
         $this->assertCount(3, $buckets);
 
-        $this->assertEquals(5, $buckets[0]->getMinLevel(), 'Critical level');
-        $this->assertEquals(2, $buckets[1]->getMinLevel(), 'Notice level');
-        $this->assertEquals(0, $buckets[2]->getMinLevel(), 'Debug level');
+        $this->assertEquals(2, $buckets[0]->getMinLevel(), 'Critical level');
+        $this->assertEquals(5, $buckets[1]->getMinLevel(), 'Notice level');
+        $this->assertEquals(7, $buckets[2]->getMinLevel(), 'Debug level');
     }
 
     public function testLogEntriesAreCascasdingDown()

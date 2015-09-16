@@ -70,7 +70,7 @@ class LogFormatterTest extends \PHPUnit_Framework_TestCase
         $this->logger->error('hello {who}', array('who'=>'world'));
 
         $this->expectOutputRegex(
-            '@\{"timestamp":.*\,"name":"error"\,"level_code":4\,"message":"hello world","context":\{"who":"world"\}\,"formatter":\{"separator":"~"\}\}@'
+            '@\{"timestamp":.*\,"name":"error"\,"level_code":3\,"message":"hello world","context":\{"who":"world"\}\,"formatter":\{"separator":"~"\}\}@'
         );
     }
 }

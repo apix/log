@@ -27,21 +27,21 @@ abstract class AbstractLogger extends PsrAbstractLogger
      * @var array
      */
     protected static $levels = array(
-        'debug',
-        'info',
-        'notice',
-        'warning',
-        'error',
-        'critical',
+        'emergency',
         'alert',
-        'emergency'
+        'critical',
+        'error',
+        'warning',
+        'notice',
+        'info',
+        'debug'
     );
 
     /**
      * Holds the minimal level index supported by this logger.
      * @var int
      */
-    protected $min_level = 0;
+    protected $min_level = 7;
 
     /**
      * Whether this logger will cascade downstream.
@@ -121,7 +121,7 @@ abstract class AbstractLogger extends PsrAbstractLogger
      */
     public function isHandling($level_code)
     {
-        return $level_code >= $this->min_level;
+        return $this->min_level >= $level_code;
     }
 
     /**
@@ -202,6 +202,10 @@ abstract class AbstractLogger extends PsrAbstractLogger
             $entries->setFormatter($this->getLogFormatter());
 
             $this->write($entries);
+        }
+
+        if(method_exists($this, 'close')) {
+            $this->close();
         }
     }
 
