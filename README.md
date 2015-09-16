@@ -10,7 +10,8 @@ Minimalist, light and fast **PSR-3** compliant logger.
  * [**File**](src/Logger/File.php) ~ logs are appended to a file,
  * [**Sapi**](src/Logger/Sapi.php) ~ logs are sent directly to the SAPI,
  * [**Runtime**](src/Logger/Runtime.php) as an Array/ArrayObject wrapper,
- * and [**Nil**](src/Logger/Nil.php) as Null log wrapper.
+ * [**Nil**](src/Logger/Nil.php) as Null log wrapper,
+ * and [**Stream**](src/Logger/Stream.php) as stream wrapper.
 * Extendable, additional logging backends are available:
  * [**PHPMailer/apix-log-phpmailer**](https://github.com/PHPMailer/apix-log-phpmailer) ~ logs are sent using PHPMailer.
  * Contributions will be linked here...
@@ -49,7 +50,7 @@ $app_logger->setMinLevel('warning')  // intercept logs that are >= `warning`
            ->setCascading(false)     // don't propagate to further buckets
            ->setDeferred(true);      // postpone/accumulate logs processing
 ```
-Above, log entries with a level of `warning` or more (see the [Log levels](#Log-levels) for the order) will be caught by this logger. `setCascading()` was set to *false* (default is *true*) so the entries caught here won't continue downstream past that particular bucket. `setDeferred()` was set to *true* (default is *false*) so processing happen on `__destruct` (end of script generally) rather than on the fly. 
+Above, log entries with a level of `warning` or more (see the [Log levels](#log-levels) for the order) will be caught by this logger. `setCascading()` was set to *false* (default is *true*) so the entries caught here won't continue downstream past that particular bucket. `setDeferred()` was set to *true* (default is *false*) so processing happen on `__destruct` (end of script generally) rather than on the fly. 
 
 Now, lets create a main logger object and inject the two loggers.
 ```php
@@ -96,7 +97,7 @@ The eight [RFC 5424][] levels of logs are supported, in cascading order:
  Emergency | System level failure (not application level)
 
 [PSR-3]: http://tools.ietf.org/html/rfc5424
-[RFC 5424]: http://tools.ietf.org/html/rfc5424
+[RFC 5424]: http://tools.ietf.org/html/rfc5424#section-6.2.1
 
 Installation
 ------------------------
