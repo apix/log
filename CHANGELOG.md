@@ -1,11 +1,18 @@
 # APIx Log changelog
 
+#### Version 1.2.0 (XX-Sep-2015)
+- Refactored and documented `LoggerInterface`.
+- Added `LogFormatter` class.
+- Updated the README.md
+- Changed the ordering of the log levels to match [RFC5424](http://tools.ietf.org/html/rfc5424#section-6.2.1) (thanks @jspalink).
+- Added `Stream` logger.
+
 #### Version 1.1.4 (10-Sep-2015)
 - Bug fix.  
 
 #### Version 1.1.3 (10-Sep-2015)
 - Added `setDeferred` so processing of logs happen at destruction time on a bucket and/or logger level. 
-- Updated the README.md accordingly.
+- Updated the README.md accordingly (thanks @Synchro).
 
 #### Version 1.1.2 (28-Aug-2015)
 - Updated the README.md
