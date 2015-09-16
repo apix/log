@@ -9,7 +9,7 @@
 
 namespace Apix\Log\tests\Logger;
 
-use Apix\Log\Logger\Runtime;
+use Apix\Log\Logger;
 
 class RuntimeTest extends TestCase
 {
@@ -17,7 +17,7 @@ class RuntimeTest extends TestCase
 
     protected function setUp()
     {
-        $this->logger = new Runtime();
+        $this->logger = new Logger\Runtime();
     }
 
     protected function tearDown()

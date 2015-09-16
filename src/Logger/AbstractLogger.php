@@ -218,9 +218,17 @@ abstract class AbstractLogger extends PsrAbstractLogger
             $this->write($entries);
         }
 
-        if(method_exists($this, 'close')) {
-            $this->close();
-        }
+        $this->close();
+    }
+
+    /**
+     * Closes the logger ~ acts as last resrt garbage collect.
+     *
+     * This method is called last at __destruct() time.
+     */
+    public function close()
+    {
+        // empty
     }
 
     /**
