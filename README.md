@@ -23,7 +23,7 @@ Feel free to comment, send pull requests and patches...
 
 :new: *Log dispatch can be postponed/accumulated using `setDeferred()`.*
 
-Basic usage (*standalone*)
+Basic usage ~ *standalone*
 -----------
 ```php
 use Apix\Log;
@@ -32,7 +32,7 @@ $urgent_logger = new Logger\Mail('franck@foo.bar');
 $urgent_logger->setMinLevel('critical');   // catch logs >= to `critical`
 ```
 
-This logger/bucket will intercept `critical`, `alert` and `emergency` logs (see [Log levels](#Log-levels)).
+This logger is now set to intercept `critical`, `alert` and `emergency` logs.
 
 To log an event, use:
 
@@ -40,55 +40,60 @@ To log an event, use:
 $urgent_logger->alert('Running out of {stuff}', ['stuff' => 'beers']);
 ```
 
-Advanced usage (*multi-logs dispatcher*)
+Advanced usage ~ *multi-logs dispatcher*
 --------------
-Okay. Lets create some additional loggers/buckets -- one generic, another one for development.
-
+Lets create an additional logger (or bucket of logs).
 ```php
 $app_logger = new Logger\File('/var/log/apix_app.log');
-$app_logger->setMinLevel('notice')  // intercept logs that are >= `notice`,
-           ->setDeferred(True)      // postpone/accumulate logs processing,
-           ->setCascading(False);   // don't propagate to further buckets.
+$app_logger->setMinLevel('warning')  // intercept logs that are >= `warning`
+           ->setCascading(false)     // don't propagate to further buckets
+           ->setDeferred(true);      // postpone/accumulate logs processing
+```
+Above, log entries with a level of `warning` or more (see the [Log levels](#Log-levels) for the order) will be caught by this logger. `setCascading()` was set to *false* (default is *true*) so the entries caught here won't continue downstream past that particular bucket. `setDeferred()` was set to *true* (default is *false*) so processing happen on `__destruct` (end of script generally) rather than on the fly. 
 
-// The main logger object (injecting the previous buckets)
+Now, lets create a main logger object and inject the two loggers.
+```php
+// The main logger object (injecting the previous loggers/buckets)
 $logger = new Logger( array($urgent_logger, $app_logger) );
-
+```
+Lets create an additional logger -- just for development purposes.
+```php
 if(DEBUG) {
-  // Bucket for the remaining logs -- i.e. `info` and `debug`
+  // Bucket for the remaining logs -- i.e. `notice`, `info` and `debug`
   $debug_logger = new Logger\File('/tmp/apix_develop.log');
-  $debug_logger->setMinLevel('debug');  // Note: `debug` is the default!
+  $debug_logger->setMinLevel('debug');
 
   $logger->add($debug_logger);   // another way to inject a bucket
 }
 ```
-
-Note that `setCascading()` was set to False (default is True) which means that any intercepted log entries won't continue downstream past that particular bucket. So in that case, the debug bucket will only get `info` and `debug` log entries.
-
-Finally, you can push some log entries in the following manner:
+Finally, lets push some log entries:
 
 ```php
-$logger->notice('Something happened -> {ctx}', array('ctx' => array(...) ) );
-  
-$e = New \Exception('boo!');
-$logger->critical('OMG saw {exception}', [ 'exception' => $e ]);
+// handled by $debug_logger
+$logger->info('Something happened -> {abc}', array('abc' => array(...)));
 
-$logger->debug($e);     // or push an object or an array directly
+// handled by both $urgent_logger & $app_logger
+$e = New \Exception('boo!');
+$logger->critical('OMG saw {bad-exception}', [ 'bad-exception' => $e ]);
+
+// handled by $app_logger
+$logger->error($e); // push an object (or array) directly
 ```
 
 Log levels
 ----------
-The eight [RFC 5424][] levels of logs are supported, in order:
+The eight [RFC 5424][] levels of logs are supported, in cascading order:
 
-Severity  | Description
-----------|------------
-emergency | System level failure (not application level)
-alert     | Failure that requires immediate attention
-critical  | Serious failure at the application level
-error     | Runtime errors, used to log unhandled exceptions
-warning   | May indicate that an error will occur if action is not taken
-notice    | Events that are unusual but not error conditions
-info      | Normal operational messages (no action required)
-debug     | Verbose info useful to developers for debugging purposes (default)
+ Severity  | Description
+-----------|-----------------------------------------------------------------
+ Debug     | Verbose info useful to developers for debugging purposes (default)
+ Info      | Normal operational messages (no action required)
+ Notice    | Events that are unusual but not error conditions
+ Warning   | May indicate that an error will occur if action is not taken
+ Error     | Runtime errors, used to log unhandled exceptions
+ Critical  | Serious failure at the application level
+ Alert     | Failure that requires immediate attention
+ Emergency | System level failure (not application level)
 
 [PSR-3]: http://tools.ietf.org/html/rfc5424
 [RFC 5424]: http://tools.ietf.org/html/rfc5424
