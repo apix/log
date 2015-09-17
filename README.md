@@ -7,7 +7,7 @@ Minimalist and fast **PSR-3** compliant logger.
 * Light, come out-of-the-box bundle with wrappers for:
  * [ErrorLog](src/Logger/ErrorLog.php), [File](src/Logger/File.php), [Mail](src/Logger/Mail.php), [Sapi](src/Logger/Sapi.php) ~ built around the `error_log()` function,
  * [Runtime](src/Logger/Runtime.php) ~ as an Array/ArrayObject wrapper, and [Nil](src/Logger/Nil.php) ~ as Null wrapper,
- * [Stream](src/Logger/Stream.php) ~ logs are sent to sockets, local and remote files and other similar resources (default to screen without output buffer),
+ * [Stream](src/Logger/Stream.php) ~ logs are sent to sockets, local and remote files, filters and other similar resources (default to screen without output buffer),
 * Extendable, additional logging backends are available:
  * [PHPMailer/apix-log-phpmailer](/PHPMailer/apix-log-phpmailer) ~ logs are sent using PHPMailer.
  * [jspalink/apix-log-pushover](/jspalink/apix-log-pushover) ~ logs are sent using Pushover.
