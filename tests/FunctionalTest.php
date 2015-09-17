@@ -43,9 +43,11 @@ class ReadmeTest extends \PHPUnit_Framework_TestCase
         $urgent_logger = new Logger\Runtime;
         $urgent_logger->setMinLevel('critical'); // catch logs >= to `critical`
 
-        $urgent_logger->alert('Running out of {stuff}', ['stuff' => 'beers']);
+        $urgent_logger->alert(
+            'Running out of {stuff}',
+            array('stuff' => 'beers')
+        );
 
-        
         // Advanced usage
 
         $app_logger = new Logger\Runtime;
@@ -66,8 +68,11 @@ class ReadmeTest extends \PHPUnit_Framework_TestCase
 
 
         // handled by both $urgent_logger & $app_logger
-        $e = new \Exception('boo!');
-        $logger->critical('OMG saw {bad-exception}', [ 'bad-exception' => $e ]);
+        $e = new \Exception('Boo!');
+        $logger->critical(
+            'OMG saw {bad-exception}',
+            array('bad-exception' => $e)
+        );
 
         // handled by $app_logger
         $logger->error($e); // push an object (or array) directly
@@ -85,8 +90,12 @@ class ReadmeTest extends \PHPUnit_Framework_TestCase
             $urgent_logs[0]
         );
 
+        $prefixException = version_compare(PHP_VERSION, '7.0.0-dev', '>=')
+                ? "Exception: Boo! in "
+                : "exception 'Exception' with message 'Boo!' in ";
+        
         $this->assertStringStartsWith(
-            "critical OMG saw exception 'Exception' with message 'boo!'",
+            "critical OMG saw " . $prefixException,
             $urgent_logs[1]
         );
         
@@ -96,18 +105,18 @@ class ReadmeTest extends \PHPUnit_Framework_TestCase
         $app_logs = $this->getLogs($app_logger, true);
 
         $this->assertStringStartsWith(
-            "critical OMG saw exception 'Exception' with message 'boo!'",
+            "critical OMG saw " . $prefixException,
             $app_logs[0]
         );
 
         $this->assertStringStartsWith(
-            "error exception 'Exception' with message 'boo!'",
+            "error " . $prefixException,
             $app_logs[1]
         );
 
         $this->assertSame(
-            array('info Something happened -> ["xyz"]'),
-            $this->getLogs($debug_logger)
+            'info Something happened -> ["xyz"]',
+            $this->getLogs($debug_logger)[0]
         );
     }
 
