@@ -30,7 +30,7 @@ class RuntimeTest extends TestCase
      */
     public function getLogs()
     {
-        return $this->_normalizeLogs($this->logger->getItems());
+        return self::normalizeLogs($this->logger->getItems());
     }
 
     /**
@@ -47,10 +47,10 @@ class RuntimeTest extends TestCase
         $this->logger->debug('msg1', $context);
         $this->logger->error('msg2', $context);
 
-        $logs = $this->logger->getItems();
-
-        $this->assertSame(2, count($logs));
-        $this->assertSame(array('debug msg1', 'error msg2'), $this->_normalizeLogs($logs));
+        $this->assertSame(
+            array('debug msg1', 'error msg2'),
+            $this->getLogs()
+        );
     }
 
 }

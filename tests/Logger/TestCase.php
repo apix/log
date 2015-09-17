@@ -15,7 +15,7 @@ use Psr\Log\Test\LoggerInterfaceTest;
 abstract class TestCase extends LoggerInterfaceTest
 {
 
-    protected function _normalizeLogs($logs)
+    static public function normalizeLogs($logs)
     {
         $normalize = function ($log) {
             return preg_replace_callback(
@@ -42,7 +42,7 @@ abstract class TestCase extends LoggerInterfaceTest
      */
     public function getLogs()
     {
-        return $this->_normalizeLogs(file($this->dest, FILE_IGNORE_NEW_LINES));
+        return self::normalizeLogs(file($this->dest, FILE_IGNORE_NEW_LINES));
     }
 
     public function providerMessagesAndContextes()

@@ -272,4 +272,12 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(1, $logger->getDeferredLogs());
     }
 
+    public function testSeparatorOfLogFormatter()
+    {
+        $test = $this->logger->getLogFormatter();
+        $test->separator = '~';
+        
+        $this->assertEquals('~', $this->logger->getLogFormatter()->separator);
+    }
+
 }

@@ -39,8 +39,12 @@ class StreamTest extends TestCase
     {
         fseek($this->stream, 0);
         $lines = fread($this->stream, 1000);
-        $lines = explode(PHP_EOL, $lines, -1);
-        return $this->_normalizeLogs($lines);
+        $lines = explode(
+            $this->logger->getLogFormatter()->separator,
+            $lines,
+            -1
+        );
+        return self::normalizeLogs($lines);
     }
 
     /**
