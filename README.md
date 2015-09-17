@@ -9,8 +9,8 @@ Minimalist and fast **PSR-3** compliant logger.
  * [Runtime](src/Logger/Runtime.php) ~ as an Array/ArrayObject wrapper, and [Nil](src/Logger/Nil.php) ~ as Null wrapper,
  * [Stream](src/Logger/Stream.php) ~ logs are sent to sockets, local and remote files, filters and other similar resources (default to standard output bypassing output buffering).
 * Extendable, additional logging backends are available:
- * [PHPMailer/apix-log-phpmailer](/PHPMailer/apix-log-phpmailer) ~ logs are sent using PHPMailer,
- * [jspalink/apix-log-pushover](/jspalink/apix-log-pushover) ~ logs are sent using Pushover,
+ * [PHPMailer/apix-log-phpmailer](https://github.com/PHPMailer/apix-log-phpmailer) ~ logs are sent using PHPMailer,
+ * [jspalink/apix-log-pushover](https://github.com/jspalink/apix-log-pushover) ~ logs are sent using Pushover,
  * More contributions will be linked here.
 * Clean API, see the [`LoggerInterface`](src/Logger/LoggerInterface.php) and the [`LogFormatterInterface`](src/LogFormatterInterface.php).
 * 100% Unit **tested** and compliant with PSR0, PSR1 and PSR2.
