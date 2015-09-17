@@ -26,7 +26,7 @@ namespace Apix\Log;
  *     }
  *   }
  *
- * @see tests/LogFormatterTest.php     For a more detailed example.
+ * @see tests/InterfacesTest.php     For a more detailed example.
  *
  * @author Franck Cassedanne <franck at ouarz.net>
  */

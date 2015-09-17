@@ -13,6 +13,11 @@ namespace Apix\Log;
 use Apix\Log\Logger\AbstractLogger;
 use Apix\Log\Logger\LoggerInterface;
 
+/**
+ * StandardOutput log wrapper (example).
+ *
+ * @author Franck Cassedanne <franck at ouarz.net>
+ */
 class StandardOutput extends AbstractLogger implements LoggerInterface
 {
     public function write(LogEntry $log)
@@ -21,6 +26,11 @@ class StandardOutput extends AbstractLogger implements LoggerInterface
     }
 }
 
+/**
+ * A JSON Formatter (example).
+ *
+ * @author Franck Cassedanne <franck at ouarz.net>
+ */
 class MyJsonFormatter extends LogFormatter
 {
     public $separator = '~';
@@ -34,7 +44,7 @@ class MyJsonFormatter extends LogFormatter
     }
 }
 
-class LogFormatterTest extends \PHPUnit_Framework_TestCase
+class InterfacesTest extends \PHPUnit_Framework_TestCase
 {
     protected $logger;
 
