@@ -134,6 +134,7 @@ abstract class AbstractLogger extends PsrAbstractLogger
     public function setMinLevel($name, $cascading = true)
     {
         $this->min_level = self::getLevelCode(strtolower($name));
+        $this->min_level_name = strtolower($name);
         $this->cascading = (boolean) $cascading;
 
         return $this;
@@ -205,17 +206,23 @@ abstract class AbstractLogger extends PsrAbstractLogger
     final public function __destruct()
     {
         if ($this->deferred && !empty($this->deferred_logs)) {
+
             $messages = array_map(
                 function ($log) {
-                    return $log->message;
+                    return (string) $log;
                 },
                 $this->deferred_logs
             );
+            
+            $formatter = $this->getLogFormatter();
+            
+            $messages = implode($formatter->separator, $messages);
 
             $entries = new LogEntry('notice', $messages);
-            $entries->setFormatter($this->getLogFormatter());
-
+            $entries->setFormatter( $formatter );
             $this->write($entries);
+
+            // return $this->formatter->format($this);
         }
 
         $this->close();
@@ -238,7 +245,7 @@ abstract class AbstractLogger extends PsrAbstractLogger
      */
     public function setLogFormatter(LogFormatter $formatter)
     {
-        return $this->log_formatter = $formatter;
+        $this->log_formatter = $formatter;
     }
 
     /**
@@ -247,8 +254,12 @@ abstract class AbstractLogger extends PsrAbstractLogger
      * @return LogFormatter
      */
     public function getLogFormatter()
-    {
-        return $this->log_formatter ?: new LogFormatter();
+    {    
+        if(!$this->log_formatter) {
+            $this->setLogFormatter(new LogFormatter);
+        }
+
+        return $this->log_formatter;
     }
 
 }
