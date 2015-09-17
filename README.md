@@ -38,20 +38,20 @@ To log an event, use:
 $urgent_logger->alert('Running out of {stuff}', ['stuff' => 'beers']);
 ```
 
-Advanced usage ~ *multi-logs dispatcher* (bucket of logs)
+Advanced usage ~ *multi-logs dispatcher*
 --------------
-Lets create an additional logger.
+Lets create an additional logger with purpose of catching log entries that have a severity level of `warning` or more -- see the [log levels](#log-levels) for the order.
 ```php
 $app_logger = new Logger\File('/var/log/apix_app.log');
 $app_logger->setMinLevel('warning')  // intercept logs that are >= `warning`
            ->setCascading(false)     // don't propagate to further buckets
            ->setDeferred(true);      // postpone/accumulate logs processing
 ```
-Above, log entries with a level of `warning` or more (see the [Log levels](#log-levels) for the order) will be caught by this logger. `setCascading()` was set to *false* (default is *true*) so the entries caught here won't continue downstream past that particular bucket. `setDeferred()` was set to *true* (default is *false*) so processing happen on `__destruct` (end of script generally) rather than on the fly. 
+`setCascading()` was set to *false* (default is *true*) so the entries caught here won't continue downstream past that particular log bucket. `setDeferred()` was set to *true* (default is *false*) so processing happen on `__destruct` (end of script generally) rather than on the fly. 
 
-Now, lets create a main logger object and inject the two loggers.
+Now, lets create a main logger object and inject the two previous loggers.
 ```php
-// The main logger object (injecting the previous loggers/buckets)
+// The main logger object (injecting an array of loggers)
 $logger = new Logger( array($urgent_logger, $app_logger) );
 ```
 Lets create an additional logger -- just for development/debug purposes.
@@ -62,14 +62,15 @@ if(DEBUG) {
   // $dev_logger = new Logger\File('/tmp/apix_debug.log'); 
   $dev_logger->setMinLevel('debug');
 
-  $logger->add($dev_logger);   		// another way to inject a bucket
+  $logger->add($dev_logger);   		// another way to inject a log bucket
 }
 ```
 Finally, lets push some log entries:
 
 ```php
-// handled by both $urgent_logger & $app_logger
 $e = new \Exception('Boo!');
+
+// handled by both $urgent_logger & $app_logger
 $logger->critical('OMG saw {bad-exception}', [ 'bad-exception' => $e ]);
 
 // handled by $app_logger
