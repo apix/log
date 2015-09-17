@@ -222,7 +222,7 @@ abstract class AbstractLogger extends PsrAbstractLogger
     }
 
     /**
-     * Closes the logger ~ acts as last resrt garbage collect.
+     * Closes the logger ~ acts as the last resort garbage collector.
      *
      * This method is called last at __destruct() time.
      */
@@ -250,4 +250,5 @@ abstract class AbstractLogger extends PsrAbstractLogger
     {
         return $this->log_formatter ?: new LogFormatter();
     }
+
 }
