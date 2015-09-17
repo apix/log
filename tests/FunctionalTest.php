@@ -115,8 +115,8 @@ class ReadmeTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertSame(
-            'info Something happened -> ["xyz"]',
-            $this->getLogs($debug_logger)[0]
+            array('info Something happened -> ["xyz"]'),
+            $this->getLogs($debug_logger)
         );
     }
 
