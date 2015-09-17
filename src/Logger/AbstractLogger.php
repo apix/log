@@ -127,8 +127,8 @@ abstract class AbstractLogger extends PsrAbstractLogger
     /**
      * Sets the minimal level at which this logger will be triggered.
      *
-     * @param  string $name
-     * @param  bool|true   $cascading   Should the logs continue pass that level.
+     * @param  string    $name
+     * @param  bool|true $cascading Should the logs continue pass that level.
      * @return self
      */
     public function setMinLevel($name, $cascading = true)
@@ -142,8 +142,8 @@ abstract class AbstractLogger extends PsrAbstractLogger
     /**
      * Alias to self::setMinLevel().
      *
-     * @param  string $name
-     * @param  bool|true    $blocking   Should the logs continue pass that level.
+     * @param  string    $name
+     * @param  bool|true $blocking Should the logs continue pass that level.
      * @return self
      */
     public function interceptAt($name, $blocking = true)
