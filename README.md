@@ -74,7 +74,7 @@ Finally, lets push some log entries:
 $logger->info('Something happened -> {abc}', array('abc' => array(...)));
 
 // handled by both $urgent_logger & $app_logger
-$e = New \Exception('boo!');
+$e = new \Exception('boo!');
 $logger->critical('OMG saw {bad-exception}', [ 'bad-exception' => $e ]);
 
 // handled by $app_logger
