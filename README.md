@@ -2,23 +2,20 @@ APIx Log, very thin PSR-3 logger
 ================================
 [![Latest Stable Version](https://poser.pugx.org/apix/log/v/stable.svg)](https://packagist.org/packages/apix/log)  [![Build Status](https://travis-ci.org/frqnck/apix-log.png?branch=master)](https://travis-ci.org/frqnck/apix-log)  [![Code Quality](https://scrutinizer-ci.com/g/frqnck/apix-log/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/frqnck/apix-log/?branch=master)  [![Code Coverage](https://scrutinizer-ci.com/g/frqnck/apix-log/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/frqnck/apix-log/?branch=master)  [![License](https://poser.pugx.org/apix/log/license.svg)](https://packagist.org/packages/apix/log)
 
-Minimalist, light and fast **PSR-3** compliant logger.
+Minimalist and fast **PSR-3** compliant logger.
 
-* Light, bundles with a wrapper to the `error_log()` function, providing:
- * [**ErrorLog**](src/Logger/ErrorLog.php) ~ logs are sent to PHP's system logger,
- * [**Mail**](src/Logger/Mail.php) ~ logs are sent by email(s),
- * [**File**](src/Logger/File.php) ~ logs are appended to a file,
- * [**Sapi**](src/Logger/Sapi.php) ~ logs are sent directly to the SAPI,
- * [**Runtime**](src/Logger/Runtime.php) as an Array/ArrayObject wrapper,
- * [**Nil**](src/Logger/Nil.php) as Null log wrapper,
- * and [**Stream**](src/Logger/Stream.php) as stream wrapper.
+* Light, come out-of-the-box bundle with wrappers for:
+ * [ErrorLog](src/Logger/ErrorLog.php), [File](src/Logger/File.php), [Mail](src/Logger/Mail.php), [Sapi](src/Logger/Sapi.php) ~ built around the `error_log()` function,
+ * [Runtime](src/Logger/Runtime.php) ~ as an Array/ArrayObject wrapper, and [Nil](src/Logger/Nil.php) ~ as Null wrapper,
+ * [Stream](src/Logger/Stream.php) ~ logs are sent to sockets, local and remote files and other similar resources (default to screen without output buffer),
 * Extendable, additional logging backends are available:
- * [**PHPMailer/apix-log-phpmailer**](https://github.com/PHPMailer/apix-log-phpmailer) ~ logs are sent using PHPMailer.
- * Contributions will be linked here...
-* Easy peasy API, see the [`LoggerInterface`](src/Logger/LoggerInterface.php) and the [`LogFormatterInterface`](src/LogFormatterInterface.php).
+ * [PHPMailer/apix-log-phpmailer](/PHPMailer/apix-log-phpmailer) ~ logs are sent using PHPMailer.
+ * [jspalink/apix-log-pushover](/jspalink/apix-log-pushover) ~ logs are sent using Pushover.
+ * More contributions will be linked here.
+* Clean API, see the [`LoggerInterface`](src/Logger/LoggerInterface.php) and the [`LogFormatterInterface`](src/LogFormatterInterface.php).
 * 100% Unit **tested** and compliant with PSR0, PSR1 and PSR2.
 * Continuously integrated against **PHP 5.3**, **5.4**, **5.5**, **5.6**, **7.0** and **HHVM**.
-* Available as a **[Composer](https://packagist.org/packages/apix/log)** ~~and as a [PEAR](http://pear.ouarz.net)~~ package.
+* Available as a [Composer](https://packagist.org/packages/apix/log) ~~and as a [PEAR](http://pear.ouarz.net)~~ package.
 
 Feel free to comment, send pull requests and patches...
 
@@ -33,7 +30,7 @@ $urgent_logger = new Logger\Mail('franck@foo.bar');
 $urgent_logger->setMinLevel('critical');   // catch logs >= to `critical`
 ```
 
-This logger is now set to intercept `critical`, `alert` and `emergency` logs.
+This simple logger is now set to intercept `critical`, `alert` and `emergency` logs.
 
 To log an event, use:
 
@@ -41,9 +38,9 @@ To log an event, use:
 $urgent_logger->alert('Running out of {stuff}', ['stuff' => 'beers']);
 ```
 
-Advanced usage ~ *multi-logs dispatcher*
+Advanced usage ~ *multi-logs dispatcher* (bucket of logs)
 --------------
-Lets create an additional logger (or bucket of logs).
+Lets create an additional logger.
 ```php
 $app_logger = new Logger\File('/var/log/apix_app.log');
 $app_logger->setMinLevel('warning')  // intercept logs that are >= `warning`
@@ -57,28 +54,29 @@ Now, lets create a main logger object and inject the two loggers.
 // The main logger object (injecting the previous loggers/buckets)
 $logger = new Logger( array($urgent_logger, $app_logger) );
 ```
-Lets create an additional logger -- just for development purposes.
+Lets create an additional logger -- just for development/debug purposes.
 ```php
 if(DEBUG) {
   // Bucket for the remaining logs -- i.e. `notice`, `info` and `debug`
-  $debug_logger = new Logger\File('/tmp/apix_develop.log');
-  $debug_logger->setMinLevel('debug');
+  $dev_logger = new Logger\Stream(); // default to screen without output buffer  
+  // $dev_logger = new Logger\File('/tmp/apix_debug.log'); 
+  $dev_logger->setMinLevel('debug');
 
-  $logger->add($debug_logger);   // another way to inject a bucket
+  $logger->add($dev_logger);   		// another way to inject a bucket
 }
 ```
 Finally, lets push some log entries:
 
 ```php
-// handled by $debug_logger
-$logger->info('Something happened -> {abc}', array('abc' => array(...)));
-
 // handled by both $urgent_logger & $app_logger
-$e = new \Exception('boo!');
+$e = new \Exception('Boo!');
 $logger->critical('OMG saw {bad-exception}', [ 'bad-exception' => $e ]);
 
 // handled by $app_logger
 $logger->error($e); // push an object (or array) directly
+
+// handled by $dev_logger
+$logger->info('Testing a var {my_var}', array('my_var' => array(...)));
 ```
 
 Log levels
