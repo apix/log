@@ -134,7 +134,6 @@ abstract class AbstractLogger extends PsrAbstractLogger
     public function setMinLevel($name, $cascading = true)
     {
         $this->min_level = self::getLevelCode(strtolower($name));
-        $this->min_level_name = strtolower($name);
         $this->cascading = (boolean) $cascading;
 
         return $this;
@@ -144,14 +143,12 @@ abstract class AbstractLogger extends PsrAbstractLogger
      * Alias to self::setMinLevel().
      *
      * @param  string    $name
-     * @param  bool|true $blocking Should the logs continue pass that level.
+     * @param  bool|false $blocking Should the logs continue pass that level.
      * @return self
      */
-    public function interceptAt($name, $blocking = true)
+    public function interceptAt($name, $blocking = false)
     {
-        $this->setMinLevel($name, $blocking);
-
-        return $this;
+        return $this->setMinLevel($name, !$blocking);
     }
 
     /**

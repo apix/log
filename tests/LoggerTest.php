@@ -26,6 +26,11 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
         unset($this->logger);
     }
 
+    protected function _getPrivateAttribute($prop)
+    {
+        return \PHPUnit_Framework_Assert::readAttribute($this->logger, $prop);
+    }
+
     /**
      * @see http://tools.ietf.org/html/rfc5424#section-6.2.1
      */
@@ -201,15 +206,12 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
 
     public function testSetCascading()
     {
-        $logger = new Logger\Runtime();
         $this->assertTrue(
-            \PHPUnit_Framework_Assert::readAttribute($logger, "cascading"),
+            $this->_getPrivateAttribute("cascading"),
             "The 'cascading' propertie should be True by default"
         );
-        $logger->setCascading(false);
-        $this->assertFalse(
-            \PHPUnit_Framework_Assert::readAttribute($logger, "cascading")
-        );
+        $this->logger->setCascading(false);
+        $this->assertFalse($this->_getPrivateAttribute("cascading"));
     }
 
     public function testCascading()
@@ -234,18 +236,15 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(2, $buckets[0]->getItems(), 'app_log count = 2');
         $this->assertCount(1, $buckets[1]->getItems(), 'dev_log count = 1');
     }
-
+    
     public function testSetDeferred()
     {
-        $logger = new Logger\Runtime();
         $this->assertFalse(
-            \PHPUnit_Framework_Assert::readAttribute($logger, "deferred"),
+            $this->_getPrivateAttribute('deferred'),
             "The 'deferred' propertie should be False by default"
         );
-        $logger->setDeferred(true);
-        $this->assertTrue(
-            \PHPUnit_Framework_Assert::readAttribute($logger, "deferred")
-        );
+        $this->logger->setDeferred(true);
+        $this->assertTrue($this->_getPrivateAttribute('deferred'));
     }
 
     public function testDeferring()
@@ -278,6 +277,19 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
         $test->separator = '~';
         
         $this->assertEquals('~', $this->logger->getLogFormatter()->separator);
+    }
+
+    public function testInterceptAtAliasSetMinLevel()
+    {
+        $this->assertEquals(7, $this->logger->getMinLevel());
+
+        $this->logger->setMinLevel('alert', true);
+        $this->assertEquals(1, $this->logger->getMinLevel());
+        $this->assertTrue($this->_getPrivateAttribute("cascading"));
+
+        $this->logger->interceptAt('warning', true);
+        $this->assertEquals(4, $this->logger->getMinLevel());
+        $this->assertFalse($this->_getPrivateAttribute("cascading"));
     }
 
 }
