@@ -14,7 +14,6 @@ use Apix\Log\Logger;
 
 class StreamTest extends TestCase
 {
-    // protected $dest = 'file:///tmp/apix-unit-test-logger-stream.log';
     protected $dest = 'php://memory';
     protected $stream, $logger;
 
@@ -27,9 +26,6 @@ class StreamTest extends TestCase
     protected function tearDown()
     {
         unset($this->logger, $this->stream);
-        // if (file_exists($this->dest)) {
-        //     unlink($this->dest);
-        // }
     }
 
     /**
