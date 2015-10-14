@@ -39,13 +39,13 @@ class Stream extends AbstractLogger implements LoggerInterface
             $stream = @fopen($stream, $mode);
         }
 
-        $this->stream = $stream;
-
-        if (!is_resource($this->stream)) {
-            throw new InvalidArgumentException(
-                sprintf('The stream "%s" cannot be created or opened', $this->stream), 1
-            );
+        if (!is_resource($stream)) {
+            throw new InvalidArgumentException(sprintf(
+                'The stream "%s" cannot be created or opened', $stream
+            ));
         }
+
+        $this->stream = $stream;
     }
 
     /**
@@ -53,6 +53,11 @@ class Stream extends AbstractLogger implements LoggerInterface
      */
     public function write(LogEntry $log)
     {
+        if (!is_resource($this->stream)) {
+            throw new \LogicException(
+                'The stream resource has been __destruct() too early'
+            );
+        }
         return (bool) fwrite($this->stream, $log . $log->formatter->separator);
     }
 
@@ -61,7 +66,9 @@ class Stream extends AbstractLogger implements LoggerInterface
      */
     public function close()
     {
-        fclose($this->stream);
+        if (is_resource($this->stream)) {
+            fclose($this->stream);
+        }
     }
 
 }

@@ -1,5 +1,8 @@
 # APIx Log changelog
 
+#### Version `1.2.1` (XX-XX-2015)
+- Added `\LogicException` when the stream has been `__destruct()` too early.
+
 #### Version `1.2.0` (18-Sep-2015)
 NOTE: The major version number update is due to some internal changes. The actual client methods have not been changed, i.e. has the same signatures as the `1.1.*` branch.
 - Changes to the handling and processing of each individual log entry (resulting in memory and CPU optimisation).
