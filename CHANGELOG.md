@@ -1,5 +1,9 @@
 # APIx Log changelog
 
+#### Version `1.2.2` (XX-Sep-2016)
+- Updated to be compatible with latest PHPUnit.
+- Updated to the latest PSR-3 (PSR Log) version.
+
 #### Version `1.2.1` (15-Oct-2015)
 - Added `\LogicException` when the stream has been `__destruct()` too early.
 

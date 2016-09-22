@@ -89,7 +89,11 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
 
     protected function _getMocklogger($r = array())
     {
-        return $this->getMock('Apix\Log\Logger\Nil', $r);
+        return !method_exists($this, 'createMock')
+                    ? $this->getMock('Apix\Log\Logger\Nil', $r)
+                    : $this->getMockBuilder('Apix\Log\Logger\Nil')
+                           ->setMethods($r)
+                           ->getMock();
     }
 
     public function testWriteIsCalled()
@@ -131,13 +135,13 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
     {
         // The log bucket for everything (starts at 0 Debug level).
         $dev_log = new Logger\Runtime();
-        $dev_log->setMinLevel('debug', $cascading);       
+        $dev_log->setMinLevel('debug', $cascading);
 
         // The log bucket for Critical, Alert and Emergency.
         $urgent_log = new Logger\Runtime();
         $urgent_log->setMinLevel('critical', $cascading);
 
-        // The log bucket that starts at Notice level 
+        // The log bucket that starts at Notice level
         $notices_log = new Logger\Runtime();
         $notices_log->setMinLevel('notice', $cascading);
 
@@ -219,12 +223,12 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
         $dev_log = new Logger\Runtime();
         $dev_log->setMinLevel('debug');
 
-        $app_log = new Logger\Runtime();        
+        $app_log = new Logger\Runtime();
         $app_log->setMinLevel('alert');
-        
+
         $this->logger->add($dev_log);
         $this->logger->add($app_log);
-        
+
         $buckets = $this->logger->getBuckets();
 
         $this->logger->alert('cascading');
@@ -236,7 +240,7 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(2, $buckets[0]->getItems(), 'app_log count = 2');
         $this->assertCount(1, $buckets[1]->getItems(), 'dev_log count = 1');
     }
-    
+
     public function testSetDeferred()
     {
         $this->assertFalse(
@@ -275,7 +279,7 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
     {
         $test = $this->logger->getLogFormatter();
         $test->separator = '~';
-        
+
         $this->assertEquals('~', $this->logger->getLogFormatter()->separator);
     }
 
