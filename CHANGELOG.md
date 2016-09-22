@@ -1,6 +1,6 @@
 # APIx Log changelog
 
-#### Version `1.2.1` (XX-XX-2015)
+#### Version `1.2.1` (15-Oct-2015)
 - Added `\LogicException` when the stream has been `__destruct()` too early.
 
 #### Version `1.2.0` (18-Sep-2015)
