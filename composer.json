@@ -2,7 +2,7 @@
     "name": "apix/log",
     "description": "Minimalist, thin and fast PSR-3 compliant (multi-bucket) logger.",
     "type": "library",
-    "keywords": ["psr", "psr-3", "log", "logger", "apix"],
+    "keywords": ["psr", "psr-3", "log", "logger", "apix", "tracker"],
     "homepage": "https://github.com/frqnck/apix-log",
     "license": "BSD-3-Clause",
     "authors": [
@@ -19,7 +19,8 @@
         "psr/log": "~1.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "4.8.*"
+        "phpunit/phpunit": "4.8.*",
+        "satooshi/php-coveralls": "~0.7.1"
     },
     "autoload": {
         "psr-4": { "Apix\\Log\\": "src/" }
