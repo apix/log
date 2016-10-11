@@ -68,6 +68,12 @@ abstract class AbstractLogger extends PsrAbstractLogger
     protected $log_formatter = null;
 
     /**
+     * Holds the logger options (useful to set default options).
+     * @var array
+     */
+    protected $options = array();
+
+    /**
      * Gets the named level code.
      *
      * @param  string $level_name The name of a PSR-3 level.
@@ -257,6 +263,18 @@ abstract class AbstractLogger extends PsrAbstractLogger
         }
 
         return $this->log_formatter;
+    }
+
+    /**
+     * Sets and merges the options for this logger, overriding any default.
+     *
+     * @param array|null $options
+     */
+    public function setOptions(array $options=null)
+    {
+        if (null !== $options) {
+            $this->options = $options+$this->options;
+        }
     }
 
 }

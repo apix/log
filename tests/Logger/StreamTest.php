@@ -60,7 +60,6 @@ class StreamTest extends TestCase
     /**
      * @expectedException Psr\Log\InvalidArgumentException
      * @expectedExceptionMessage The stream "" cannot be created or opened
-     * @expectedExceptionCode 1
      */
     public function testThrowsInvalidArgumentExceptionWhenFileCannotBeCreated()
     {
@@ -68,13 +67,14 @@ class StreamTest extends TestCase
     }
 
     /**
-     * @expectedException Psr\Log\InvalidArgumentException
-     * @expectedExceptionMessage Log file "/" is not writable
-     * @expectedExceptionCode 2
+     * @expectedException \LogicException
+     * @expectedExceptionMessage The stream resource has been __destruct() too early
      */
-    // public function testThrowsInvalidArgumentExceptionWhenProtected()
-    // {
-    //     new Logger\Stream('/');
-    // }
+    public function testThrowsLogicException()
+    {
+        $logger = new Logger\Stream;
+        $logger->__destruct();
+        $logger->debug('foo');
+    }
 
 }

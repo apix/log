@@ -15,12 +15,6 @@ use Apix\Log\Logger;
 class FileTest extends TestCase
 {
 
-    protected $dest = './apix-unit-test-logger.log';
-
-    protected function setUp()
-    {
-    }
-
     protected function tearDown()
     {
         if (file_exists($this->dest)) {
@@ -51,7 +45,7 @@ class FileTest extends TestCase
      * @expectedExceptionMessage Log file "/" is not writable
      * @expectedExceptionCode 2
      */
-    public function testThrowsInvalidArgumentExceptionWhenProtected()
+    public function testThrowsInvalidArgumentExceptionWhenNotWritable()
     {
         new Logger\File('/');
     }

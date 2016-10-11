@@ -2,7 +2,7 @@
     "name": "apix/log",
     "description": "Minimalist, thin and fast PSR-3 compliant (multi-bucket) logger.",
     "type": "library",
-    "keywords": ["psr", "psr-3", "log", "logger", "apix", "tracker"],
+    "keywords": ["psr", "psr-3", "psr-log", "log", "logger", "logging", "tracker", "tracking", "apix"],
     "homepage": "https://github.com/frqnck/apix-log",
     "license": "BSD-3-Clause",
     "authors": [

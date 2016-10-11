@@ -15,7 +15,6 @@ use Apix\Log\Logger;
 class ErrorLogTest extends TestCase
 {
 
-    protected $dest = './apix-unit-test-logger.log';
     // protected $dest = '/dev/stdout';
 
     protected function setUp()

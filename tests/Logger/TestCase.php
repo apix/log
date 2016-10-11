@@ -14,6 +14,7 @@ use Psr\Log\Test\LoggerInterfaceTest;
 
 abstract class TestCase extends LoggerInterfaceTest
 {
+    protected $dest = 'build/apix-unit-test-logger.log';
 
     static public function normalizeLogs($logs)
     {
