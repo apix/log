@@ -5,14 +5,14 @@ APIx Log, very thin PSR-3 logger
 Minimalist and fast **PSR-3** compliant logger.
 
 * Light, come out-of-the-box bundle with wrappers for:
- * [ErrorLog](src/Logger/ErrorLog.php), [File](src/Logger/File.php), [Mail](src/Logger/Mail.php), [Sapi](src/Logger/Sapi.php) ~ built around the `error_log()` function,
- * [Runtime](src/Logger/Runtime.php) ~ as an Array/ArrayObject wrapper, and [Nil](src/Logger/Nil.php) ~ as Null wrapper,
- * [Stream](src/Logger/Stream.php) ~ logs are sent to sockets, local and remote files, filters and other similar resources (default to standard output bypassing output buffering).
+   * [ErrorLog](src/Logger/ErrorLog.php), [File](src/Logger/File.php), [Mail](src/Logger/Mail.php), [Sapi](src/Logger/Sapi.php) ~ built around the `error_log()` function,
+   * [Runtime](src/Logger/Runtime.php) ~ as an Array/ArrayObject wrapper, and [Nil](src/Logger/Nil.php) ~ as Null wrapper,
+   * [Stream](src/Logger/Stream.php) ~ logs are sent to sockets, local and remote files, filters and other similar resources (default to standard output bypassing output buffering).
 * Extendable, additional logging backends are available:
- * [PHPMailer/apix-log-phpmailer](https://github.com/PHPMailer/apix-log-phpmailer) ~ logs are sent using PHPMailer,
- * [jspalink/apix-log-pushover](https://github.com/jspalink/apix-log-pushover) ~ logs are sent using Pushover,
- * [apix/log-tracker](https://github.com/apix/log-tracker) ~ adds logger/tracker such as Google Analytics, Dashbot, etc...,
- * More contributions will be linked here.
+   * [PHPMailer/apix-log-phpmailer](https://github.com/PHPMailer/apix-log-phpmailer) ~ logs are sent using PHPMailer,
+   * [jspalink/apix-log-pushover](https://github.com/jspalink/apix-log-pushover) ~ logs are sent using Pushover,
+   * [apix/log-tracker](https://github.com/apix/log-tracker) ~ adds logger/tracker such as Google Analytics, Dashbot, etc...,
+   * More contributions will be linked here.
 * Clean API, see the [`LoggerInterface`](src/Logger/LoggerInterface.php) and the [`LogFormatterInterface`](src/LogFormatterInterface.php).
 * 100% Unit **tested** and compliant with PSR0, PSR1 and PSR2.
 * Continuously integrated against **PHP 5.3**, **5.4**, **5.5**, **5.6**, **7.0** and **HHVM**.
