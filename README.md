@@ -104,7 +104,7 @@ Installation
 
 Install the current major version using Composer with (recommended)
 ```
-$ composer require apix/log:1.1.*
+$ composer require apix/log:1.2.*
 ```
 Or install the latest stable version with
 ```
