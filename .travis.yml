@@ -26,7 +26,7 @@ cache:
    - $HOME/.composer/cache
 
 install:
-  - travis_retry composer self-update && composer install --dev --no-interaction --prefer-source
+  - travis_retry composer self-update && composer install --no-interaction --prefer-source
   - mkdir -p build/logs
   - travis_retry wget https://scrutinizer-ci.com/ocular.phar
  
@@ -39,7 +39,7 @@ script:
   - bash -c 'if [[ "$TRAVIS_PHP_VERSION" != "nightly" ]] && [[ "$TRAVIS_PHP_VERSION" != "hhvm" ]]; then wget https://scrutinizer-ci.com/ocular.phar; fi;'
 
 after_script:
-  - php ocular.phar code-coverage:upload --format=php-clover build/logs/clover.xml; fi
+  - php ocular.phar code-coverage:upload --format=php-clover build/logs/clover.xml;
   - php vendor/bin/coveralls -v
 
 notifications:
