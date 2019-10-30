@@ -1,6 +1,6 @@
-APIx Log, very thin PSR-3 logger
+APIx Log, very thin PSR-3 logger [![Build Status](https://travis-ci.org/apix/log.png?branch=master)](https://travis-ci.org/apix/log)
 ================================
-[![Latest Stable Version](https://poser.pugx.org/apix/log/v/stable.svg)](https://packagist.org/packages/apix/log)  [![Build Status](https://travis-ci.org/frqnck/apix-log.png?branch=master)](https://travis-ci.org/frqnck/apix-log)  [![Code Quality](https://scrutinizer-ci.com/g/frqnck/apix-log/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/frqnck/apix-log/?branch=master)  [![Code Coverage](https://scrutinizer-ci.com/g/frqnck/apix-log/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/frqnck/apix-log/?branch=master)  [![License](https://poser.pugx.org/apix/log/license.svg)](https://packagist.org/packages/apix/log)
+[![Latest Stable Version](https://poser.pugx.org/apix/log/version?format=flat-square)](https://packagist.org/packages/apix/log)  [![Total Downloads](https://poser.pugx.org/apix/log/downloads)](https://packagist.org/packages/apix/log)  [![Build Status](https://scrutinizer-ci.com/g/frqnck/apix-log/badges/build.png?b=master)](https://scrutinizer-ci.com/g/frqnck/apix-log/build-status/master)  [![Code Quality](https://scrutinizer-ci.com/g/frqnck/apix-log/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/frqnck/apix-log/?branch=master)  [![Code Coverage](https://scrutinizer-ci.com/g/frqnck/apix-log/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/frqnck/apix-log/?branch=master)  [![License](https://poser.pugx.org/apix/log/license.svg)](https://packagist.org/packages/apix/log)
 
 Minimalist and fast **PSR-3** compliant logger.
 
