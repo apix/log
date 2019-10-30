@@ -59,7 +59,7 @@ matrix:
       dist: trusty
     - php: 5.5
       dist: trusty
-allow_failures:
+  allow_failures:
     - php: nightly
     - php: hhvm
 
