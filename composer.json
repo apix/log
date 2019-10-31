@@ -29,7 +29,7 @@
         "psr-4": { "Apix\\Log\\tests\\": "tests/" }
     },
     "provide": {
-        "psr/log-implementation": "1.0.0"
+        "psr/log-implementation": "^1.0"
     },
     "minimum-stability": "dev",
     "prefer-stable": true
