@@ -1,4 +1,5 @@
-APIx Log, very thin PSR-3 logger [![Build Status](https://travis-ci.org/apix/log.png?branch=master)](https://travis-ci.org/apix/log)
+APIx Log, very thin PSR-3 logger
+[![Build Status](https://travis-ci.org/apix/log.svg?branch=master)](https://travis-ci.org/apix/log)
 ================================
 [![Latest Stable Version](https://poser.pugx.org/apix/log/version)](https://packagist.org/packages/apix/log)
 [![Total Downloads](https://poser.pugx.org/apix/log/downloads)](https://packagist.org/packages/apix/log)
@@ -20,7 +21,7 @@ Minimalist and fast **PSR-3** compliant logger.
    * More contributions will be linked here.
 * Clean API, see the [`LoggerInterface`](src/Logger/LoggerInterface.php) and the [`LogFormatterInterface`](src/LogFormatterInterface.php).
 * 100% Unit **tested** and compliant with PSR0, PSR1 and PSR2.
-* Continuously integrated against **PHP 5.3**, **5.4**, **5.5**, **5.6**, **7.0** and **HHVM**.
+* [Continuously integrated](//travis-ci.org/apix/log) against **PHP 5.3**, **5.4**, **5.5**, **5.6**, **7.0**, **7.1**, **7.2**, **7.3** ~~and **HHVM**~~.
 * Available as a [Composer](https://packagist.org/packages/apix/log) ~~and as a [PEAR](http://pear.ouarz.net)~~ package.
 
 Feel free to comment, send pull requests and patches...
