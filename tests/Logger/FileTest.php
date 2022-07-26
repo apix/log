@@ -20,16 +20,9 @@ class FileTest extends \PHPUnit\Framework\TestCase
     protected function tearDown() : void
     {
         if (file_exists($this->dest)) {
+            chmod($this->dest, 0777);
             unlink($this->dest);
         }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getLogger()
-    {
-        return new Logger\File($this->dest);
     }
 
     public function testThrowsInvalidArgumentExceptionWhenFileCannotBeCreated()
@@ -42,17 +35,13 @@ class FileTest extends \PHPUnit\Framework\TestCase
 
     public function testThrowsInvalidArgumentExceptionWhenNotWritable()
     {
-        if (strtoupper(substr(php_uname('s'), 0, 3)) === 'WIN') {
-            $file = 'C:\Windows\.';
-        } else {
-            $file = '.';
-        }
+        touch($this->dest);
+        chmod($this->dest, 0000);
 
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage("Log file \"{$file}\" is not writable");
+        $this->expectExceptionMessage("Log file \"{$this->dest}\" is not writable");
         $this->expectExceptionCode(2);
 
-
-        new Logger\File($file);
+        new Logger\File($this->dest);
     }
 }
