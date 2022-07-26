@@ -31,9 +31,8 @@ Feel free to comment, send pull requests and patches...
 Basic usage ~ *standalone*
 -----------
 ```php
-use Apix\Log;
 
-$urgent_logger = new Logger\Mail('franck@foo.bar');
+$urgent_logger = new Apix\Log\Logger\Mail('franck@foo.bar');
 $urgent_logger->setMinLevel('critical');   // catch logs >= to `critical`
 ```
 
@@ -49,7 +48,7 @@ Advanced usage ~ *multi-logs dispatcher*
 --------------
 Lets create an additional logger with purpose of catching log entries that have a severity level of `warning` or more -- see the [log levels](#log-levels) for the order.
 ```php
-$app_logger = new Logger\File('/var/log/apix_app.log');
+$app_logger = new Apix\Log\Logger\File('/var/log/apix_app.log');
 $app_logger->setMinLevel('warning')  // intercept logs that are >= `warning`
            ->setCascading(false)     // don't propagate to further buckets
            ->setDeferred(true);      // postpone/accumulate logs processing
@@ -59,13 +58,13 @@ $app_logger->setMinLevel('warning')  // intercept logs that are >= `warning`
 Now, lets create a main logger object and inject the two previous loggers.
 ```php
 // The main logger object (injecting an array of loggers)
-$logger = new Logger( array($urgent_logger, $app_logger) );
+$logger = new Apix\Log\Logger( array($urgent_logger, $app_logger) );
 ```
 Lets create an additional logger -- just for development/debug purposes.
 ```php
 if(DEBUG) {
   // Bucket for the remaining logs -- i.e. `notice`, `info` and `debug`
-  $dev_logger = new Logger\Stream(); // default to screen without output buffer  
+  $dev_logger = new Apix\Log\Logger\Stream(); // default to screen without output buffer
   // $dev_logger = new Logger\File('/tmp/apix_debug.log'); 
   $dev_logger->setMinLevel('debug');
 

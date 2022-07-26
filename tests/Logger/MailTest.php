@@ -8,34 +8,31 @@
  * @license http://opensource.org/licenses/BSD-3-Clause  New BSD License
  */
 
-namespace Apix\Log\tests\Logger;
+namespace Apix\Log;
 
-use Apix\Log\Logger;
+use Apix\Log;
+use Psr\Log\InvalidArgumentException;
+use PHPUnit\Framework\Assert;
 
-class MailTest extends \PHPUnit_Framework_TestCase
+class MailTest extends \PHPUnit\Framework\TestCase
 {
-
-    /**
-     * @expectedException Psr\Log\InvalidArgumentException
-     * @expectedExceptionMessage "" is an invalid email address
-     */
     public function testThrowsInvalidArgumentExceptionWhenNull()
     {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('"" is an invalid email address');
         new Logger\Mail(null);
     }
 
-    /**
-     * @expectedException Psr\Log\InvalidArgumentException
-     * @expectedExceptionMessage "foo" is an invalid email address
-     */
     public function testThrowsInvalidArgumentException()
     {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('"foo" is an invalid email address');
         new Logger\Mail('foo');
     }
 
     public function testConstructor()
     {
         new Logger\Mail('foo@bar.com', 'CC: some@somewhere.com');
+        $this->assertTrue(true);
     }
-
 }

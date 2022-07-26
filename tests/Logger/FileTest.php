@@ -11,11 +11,13 @@
 namespace Apix\Log\tests\Logger;
 
 use Apix\Log\Logger;
+use Psr\Log\InvalidArgumentException;
 
-class FileTest extends TestCase
+class FileTest extends \PHPUnit\Framework\TestCase
 {
+    protected $dest = 'test';
 
-    protected function tearDown()
+    protected function tearDown() : void
     {
         if (file_exists($this->dest)) {
             unlink($this->dest);
@@ -30,24 +32,27 @@ class FileTest extends TestCase
         return new Logger\File($this->dest);
     }
 
-    /**
-     * @expectedException Psr\Log\InvalidArgumentException
-     * @expectedExceptionMessage Log file "" cannot be created
-     * @expectedExceptionCode 1
-     */
     public function testThrowsInvalidArgumentExceptionWhenFileCannotBeCreated()
     {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Log file "" cannot be created');
+        $this->expectExceptionCode(1);
         new Logger\File(null);
     }
 
-    /**
-     * @expectedException Psr\Log\InvalidArgumentException
-     * @expectedExceptionMessage Log file "/" is not writable
-     * @expectedExceptionCode 2
-     */
     public function testThrowsInvalidArgumentExceptionWhenNotWritable()
     {
-        new Logger\File('/');
-    }
+        if (strtoupper(substr(php_uname('s'), 0, 3)) === 'WIN') {
+            $file = 'C:\Windows\.';
+        } else {
+            $file = '.';
+        }
 
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage("Log file \"{$file}\" is not writable");
+        $this->expectExceptionCode(2);
+
+
+        new Logger\File($file);
+    }
 }

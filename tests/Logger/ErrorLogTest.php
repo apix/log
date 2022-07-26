@@ -12,12 +12,11 @@ namespace Apix\Log\tests\Logger;
 
 use Apix\Log\Logger;
 
-class ErrorLogTest extends TestCase
+class ErrorLogTest extends \PHPUnit\Framework\TestCase
 {
+    protected $dest = 'test';
 
-    // protected $dest = '/dev/stdout';
-
-    protected function setUp()
+    protected function setUp() : void
     {
         // HHVM support
         // @see: https://github.com/facebook/hhvm/issues/3558
@@ -29,19 +28,22 @@ class ErrorLogTest extends TestCase
         ini_set('error_log', $this->dest);
     }
 
-    protected function tearDown()
+    protected function tearDown() : void
     {
         if (file_exists($this->dest)) {
             unlink($this->dest);
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function getLogger()
+    public function testWrite()
     {
-        return new Logger\ErrorLog();
-    }
+        $logger = new Logger\ErrorLog();
 
+        $message = 'test log';
+        $logger->debug($message);
+
+        $content = file_get_contents($this->dest);
+
+        $this->assertStringContainsString($message, $content);
+    }
 }

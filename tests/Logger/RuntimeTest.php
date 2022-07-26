@@ -9,18 +9,19 @@
 
 namespace Apix\Log\tests\Logger;
 
+use Apix\Log\tests\Logger\TestCase;
 use Apix\Log\Logger;
 
-class RuntimeTest extends TestCase
+class RuntimeTest extends \PHPUnit\Framework\TestCase
 {
     protected $logger;
 
-    protected function setUp()
+    protected function setUp() : void
     {
         $this->logger = new Logger\Runtime();
     }
 
-    protected function tearDown()
+    protected function tearDown() : void
     {
         unset($this->logger);
     }
@@ -30,7 +31,7 @@ class RuntimeTest extends TestCase
      */
     public function getLogs()
     {
-        return self::normalizeLogs($this->logger->getItems());
+        return TestCase::normalizeLogs($this->logger->getItems());
     }
 
     /**
@@ -52,5 +53,4 @@ class RuntimeTest extends TestCase
             $this->getLogs()
         );
     }
-
 }

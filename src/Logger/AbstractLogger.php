@@ -12,6 +12,7 @@ namespace Apix\Log\Logger;
 
 use Psr\Log\AbstractLogger as PsrAbstractLogger;
 use Psr\Log\InvalidArgumentException;
+use Stringable;
 use Apix\Log\LogEntry;
 use Apix\Log\LogFormatter;
 
@@ -95,7 +96,7 @@ abstract class AbstractLogger extends PsrAbstractLogger
     /**
      * {@inheritdoc}
      */
-    public function log($level, $message, array $context = array())
+    public function log($level, Stringable|string $message, array $context = array()) : void
     {
         $entry = new LogEntry($level, $message, $context);
         $entry->setFormatter($this->getLogFormatter());
@@ -181,6 +182,15 @@ abstract class AbstractLogger extends PsrAbstractLogger
     }
 
     /**
+     * Get cascading property
+     * @return bool
+     */
+    public function cascading()
+    {
+        return $this->cascading;
+    }
+
+    /**
      * Sets wether to enable/disable log deferring.
      *
      * @param  bool $bool
@@ -191,6 +201,15 @@ abstract class AbstractLogger extends PsrAbstractLogger
         $this->deferred = (boolean) $bool;
 
         return $this;
+    }
+
+    /**
+     * Get deferred property
+     * @return bool
+     */
+    public function deferred()
+    {
+        return $this->deferred;
     }
 
     /**
