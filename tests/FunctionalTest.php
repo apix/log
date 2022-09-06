@@ -14,7 +14,7 @@ use Apix\Log\tests\Logger\TestCase;
 
 use Apix\Log\Logger;
 
-class ReadmeTest extends \PHPUnit_Framework_TestCase
+class ReadmeTest extends \PHPUnit\Framework\TestCase
 {
 
     /**
@@ -119,5 +119,4 @@ class ReadmeTest extends \PHPUnit_Framework_TestCase
             $this->getLogs($debug_logger)
         );
     }
-
 }

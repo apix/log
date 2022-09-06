@@ -10,25 +10,22 @@
 
 namespace Apix\Log;
 
+use Psr\Log\InvalidArgumentException;
 use Psr\Log\LogLevel;
+use PHPUnit\Framework\Assert;
 
-class LoggerTest extends \PHPUnit_Framework_TestCase
+class LoggerTest extends \PHPUnit\Framework\TestCase
 {
     protected $logger;
 
-    protected function setUp()
+    protected function setUp() : void
     {
         $this->logger = new Logger();
     }
 
-    protected function tearDown()
+    protected function tearDown() : void
     {
         unset($this->logger);
-    }
-
-    protected function _getPrivateAttribute($prop)
-    {
-        return \PHPUnit_Framework_Assert::readAttribute($this->logger, $prop);
     }
 
     /**
@@ -40,12 +37,10 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(3, Logger::getLevelCode('error'));
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     * @expectedExceptionMessage "stdClass" must interface "Apix\Log\Logger\LoggerInterface"
-     */
     public function testConstructorThrowsInvalidArgumentException()
     {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('"stdClass" must interface "Apix\Log\Logger\LoggerInterface"');
         new Logger(array( new \StdClass() ));
     }
 
@@ -66,11 +61,9 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
         $this->logger->critical('test crit');
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testGetLevelCodeThrows()
     {
+        $this->expectException(InvalidArgumentException::class);
         Logger::getLevelCode('non-existant');
     }
 
@@ -79,11 +72,9 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('error', Logger::getPsrLevelName(LogLevel::ERROR));
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testGetPsrLevelNameWillThrows()
     {
+        $this->expectException(InvalidArgumentException::class);
         Logger::getPsrLevelName('non-existant');
     }
 
@@ -210,12 +201,11 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
 
     public function testSetCascading()
     {
-        $this->assertTrue(
-            $this->_getPrivateAttribute("cascading"),
-            "The 'cascading' propertie should be True by default"
+        $this->assertTrue($this->logger->cascading(),
+            "The 'cascading' property should be True by default"
         );
         $this->logger->setCascading(false);
-        $this->assertFalse($this->_getPrivateAttribute("cascading"));
+        $this->assertFalse($this->logger->cascading());
     }
 
     public function testCascading()
@@ -244,11 +234,11 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
     public function testSetDeferred()
     {
         $this->assertFalse(
-            $this->_getPrivateAttribute('deferred'),
-            "The 'deferred' propertie should be False by default"
+            $this->logger->deferred(),
+            "The 'deferred' property should be False by default"
         );
         $this->logger->setDeferred(true);
-        $this->assertTrue($this->_getPrivateAttribute('deferred'));
+        $this->assertTrue($this->logger->deferred());
     }
 
     public function testDeferring()
@@ -289,11 +279,10 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
 
         $this->logger->setMinLevel('alert', true);
         $this->assertEquals(1, $this->logger->getMinLevel());
-        $this->assertTrue($this->_getPrivateAttribute("cascading"));
+        $this->assertTrue($this->logger->cascading());
 
         $this->logger->interceptAt('warning', true);
         $this->assertEquals(4, $this->logger->getMinLevel());
-        $this->assertFalse($this->_getPrivateAttribute("cascading"));
+        $this->assertFalse($this->logger->cascading());
     }
-
 }

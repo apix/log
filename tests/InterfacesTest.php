@@ -44,16 +44,16 @@ class MyJsonFormatter extends LogFormatter
     }
 }
 
-class InterfacesTest extends \PHPUnit_Framework_TestCase
+class InterfacesTest extends \PHPUnit\Framework\TestCase
 {
     protected $logger;
 
-    protected function setUp()
+    protected function setUp() : void
     {
         $this->logger = new StandardOutput();
     }
 
-    protected function tearDown()
+    protected function tearDown() : void
     {
         unset($this->logger);
     }

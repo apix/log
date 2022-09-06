@@ -10,9 +10,9 @@
 
 namespace Apix\Log\tests\Logger;
 
-use Psr\Log\Test\LoggerInterfaceTest;
+use Psr\Log\LoggerInterface;
 
-abstract class TestCase extends LoggerInterfaceTest
+abstract class TestCase implements LoggerInterface
 {
     protected $dest = 'build/apix-unit-test-logger.log';
 

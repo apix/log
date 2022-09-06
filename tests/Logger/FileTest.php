@@ -11,43 +11,37 @@
 namespace Apix\Log\tests\Logger;
 
 use Apix\Log\Logger;
+use Psr\Log\InvalidArgumentException;
 
-class FileTest extends TestCase
+class FileTest extends \PHPUnit\Framework\TestCase
 {
+    protected $dest = 'test';
 
-    protected function tearDown()
+    protected function tearDown() : void
     {
         if (file_exists($this->dest)) {
+            chmod($this->dest, 0777);
             unlink($this->dest);
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function getLogger()
-    {
-        return new Logger\File($this->dest);
-    }
-
-    /**
-     * @expectedException Psr\Log\InvalidArgumentException
-     * @expectedExceptionMessage Log file "" cannot be created
-     * @expectedExceptionCode 1
-     */
     public function testThrowsInvalidArgumentExceptionWhenFileCannotBeCreated()
     {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Log file "" cannot be created');
+        $this->expectExceptionCode(1);
         new Logger\File(null);
     }
 
-    /**
-     * @expectedException Psr\Log\InvalidArgumentException
-     * @expectedExceptionMessage Log file "/" is not writable
-     * @expectedExceptionCode 2
-     */
     public function testThrowsInvalidArgumentExceptionWhenNotWritable()
     {
-        new Logger\File('/');
-    }
+        touch($this->dest);
+        chmod($this->dest, 0000);
 
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage("Log file \"{$this->dest}\" is not writable");
+        $this->expectExceptionCode(2);
+
+        new Logger\File($this->dest);
+    }
 }
