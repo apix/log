@@ -1,6 +1,6 @@
 # APIx Log changelog
 
-#### Version `1.2.2` (XX-Oct-2016)
+#### Version `1.2.2` (31-Oct-2019)
 - Updated to be compatible with latest PHPUnit.
 - Updated to the latest PSR-3 (PSR Log) version.
 - Added link to `apix/log-tracker`.
