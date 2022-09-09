@@ -75,6 +75,12 @@ abstract class AbstractLogger extends PsrAbstractLogger
     protected $options = array();
 
     /**
+     * Minimum level logged
+     * @var int
+     */
+    protected $min_level_logged = 7;
+
+    /**
      * Gets the named level code.
      *
      * @param  string $level_name The name of a PSR-3 level.
@@ -111,6 +117,10 @@ abstract class AbstractLogger extends PsrAbstractLogger
      */
     public function process(LogEntry $log)
     {
+        if ($this->min_level_logged > $log->level_code) {
+            $this->min_level_logged = $log->level_code;
+        }
+
         if ($this->deferred) {
             $this->deferred_logs[] = $log;
         } else {
@@ -235,9 +245,9 @@ abstract class AbstractLogger extends PsrAbstractLogger
                 },
                 $this->deferred_logs
             );
-            
+
             $formatter = $this->getLogFormatter();
-            
+
             $messages = implode($formatter->separator, $messages);
 
             $entries = new LogEntry('notice', $messages);
@@ -276,7 +286,7 @@ abstract class AbstractLogger extends PsrAbstractLogger
      * @return LogFormatter
      */
     public function getLogFormatter()
-    {    
+    {
         if(!$this->log_formatter) {
             $this->setLogFormatter(new LogFormatter);
         }
@@ -296,4 +306,13 @@ abstract class AbstractLogger extends PsrAbstractLogger
         }
     }
 
+    /**
+     * Gets min level logged
+     *
+     * @return int
+     */
+    public function getMinLevelLogged() : int
+    {
+        return $this->min_level_logged;
+    }
 }

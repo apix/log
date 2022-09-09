@@ -50,7 +50,7 @@ class ErrorLog extends AbstractLogger implements LoggerInterface
     /**
      * Constructor.
      * @param string|null $file The filename to log messages to.
-     * @param integer     $type The messag/delivery type.
+     * @param integer     $type The message/delivery type.
      */
     public function __construct($file = null, $type = self::PHP)
     {
