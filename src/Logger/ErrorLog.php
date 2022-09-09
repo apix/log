@@ -61,12 +61,12 @@ class ErrorLog extends AbstractLogger implements LoggerInterface
     /**
      * {@inheritDoc}
      */
-    public function write(LogEntry $log)
+    public function write(LogEntry|string $log)
     {
         $message = (string) $log;
 
         if(!$this->deferred && $this->type == self::FILE) {
-            $message .= $log->formatter->separator;
+            $message = $log->formatter->separator . $message . $log->formatter->separator;
         }
 
         return error_log(
@@ -76,5 +76,4 @@ class ErrorLog extends AbstractLogger implements LoggerInterface
             $this->headers
         );
     }
-
 }
