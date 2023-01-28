@@ -28,7 +28,7 @@ class Runtime extends AbstractLogger implements LoggerInterface
     /**
      * {@inheritDoc}
      */
-    public function write(LogEntry $log)
+    public function write(LogEntry|string $log)
     {
         $this->items[] = (string) $log;
     }

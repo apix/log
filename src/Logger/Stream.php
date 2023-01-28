@@ -51,7 +51,7 @@ class Stream extends AbstractLogger implements LoggerInterface
     /**
      * {@inheritDoc}
      */
-    public function write(LogEntry $log)
+    public function write(LogEntry|string $log)
     {
         if (!is_resource($this->stream)) {
             throw new \LogicException(

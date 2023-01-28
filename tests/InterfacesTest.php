@@ -20,7 +20,7 @@ use Apix\Log\Logger\LoggerInterface;
  */
 class StandardOutput extends AbstractLogger implements LoggerInterface
 {
-    public function write(LogEntry $log)
+    public function write(LogEntry|string $log)
     {
         echo $log;
     }

@@ -42,5 +42,4 @@ class File extends ErrorLog
         $this->destination = $file;
         $this->type = static::FILE;
     }
-
 }

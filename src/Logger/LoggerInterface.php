@@ -39,9 +39,9 @@ interface LoggerInterface
     /**
      * Writes the given log entry.
      *
-     * @param  LogEntry $log
+     * @param  LogEntry|string $log
      * @return bool Wether the log entry was successfully written or not.
      */
-    public function write(LogEntry $log);
+    public function write(LogEntry|string $log);
 
 }
