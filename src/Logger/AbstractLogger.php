@@ -75,6 +75,12 @@ abstract class AbstractLogger extends PsrAbstractLogger
     protected $options = array();
 
     /**
+     * Whether or not log is empty.
+     * @var bool
+     */
+    protected $empty = true;
+
+    /**
      * Gets the named level code.
      *
      * @param  string $level_name The name of a PSR-3 level.
@@ -111,6 +117,10 @@ abstract class AbstractLogger extends PsrAbstractLogger
      */
     public function process(LogEntry $log)
     {
+        if ($this->empty) {
+            $this->empty = false;
+        }
+
         if ($this->deferred) {
             $this->deferred_logs[] = $log;
         } else {
@@ -276,7 +286,7 @@ abstract class AbstractLogger extends PsrAbstractLogger
      * @return LogFormatter
      */
     public function getLogFormatter()
-    {    
+    {
         if(!$this->log_formatter) {
             $this->setLogFormatter(new LogFormatter);
         }
@@ -296,4 +306,13 @@ abstract class AbstractLogger extends PsrAbstractLogger
         }
     }
 
+    /**
+     * Check if log is empty
+     *
+     * @return bool
+     */
+    public function isEmpty() : bool
+    {
+        return $this->empty;
+    }
 }
