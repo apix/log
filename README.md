@@ -109,11 +109,11 @@ Installation
 
 Install the current major version using Composer with (recommended)
 ```
-$ composer require apix/log:1.2.*
+composer require apix/log:1.3.*
 ```
 Or install the latest stable version with
 ```
-$ composer require apix/log
+composer require apix/log
 ```
 
 License
