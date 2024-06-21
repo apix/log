@@ -19,7 +19,6 @@ use Psr\Log\InvalidArgumentException;
  */
 class File extends ErrorLog
 {
-
     /**
      * Constructor.
      *
@@ -42,5 +41,4 @@ class File extends ErrorLog
         $this->destination = $file;
         $this->type = static::FILE;
     }
-
 }
