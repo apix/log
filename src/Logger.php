@@ -76,7 +76,17 @@ class Logger extends AbstractLogger
     }
 
     /**
-     * Checks if any log bucket can hanle the given code.
+     * Flush deferred logs
+     */
+    public function flushDeferredLogs()
+    {
+        foreach ($this->buckets as $bucket) {
+            $bucket->flushDeferredLogs();
+        }
+    }
+
+    /**
+     * Checks if any log bucket can handle the given code.
      *
      * @param int $level_code
      *
@@ -131,7 +141,7 @@ class Logger extends AbstractLogger
     /**
      * Sorts the log buckets, prioritizes top-down by minimal level.
      * Beware: Exisiting level will be in FIFO order.
-     * 
+     *
      * @return bool Returns TRUE on success or FALSE on failure.
      */
     protected function sortBuckets()
